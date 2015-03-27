@@ -1,0 +1,417 @@
+From a81fbb7fa0af29225bace53f955f1b54e20ba778 Mon Sep 17 00:00:00 2001
+From: hak8or <hak8or@gmail.com>
+Date: Fri, 27 Mar 2015 02:17:52 -0400
+Subject: [PATCH 5/5] Added memory tests and more debug prompts to main
+
+---
+ main.c | 348 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 343 insertions(+), 5 deletions(-)
+
+diff --git a/main.c b/main.c
+index ede5ffb..e87d7b8 100644
+--- a/main.c
++++ b/main.c
+@@ -75,12 +75,11 @@ static void display_banner (void)
+ 	char *version = "AT91Bootstrap";
+ 	char *ver_num = " "AT91BOOTSTRAP_VERSION" ("COMPILE_TIME")";
+ 
+-	usart_puts("\n");
+-	usart_puts("\n");
+ 	usart_puts(version);
+ 	usart_puts(ver_num);
+-	usart_puts("\n");
+-	usart_puts("\n");
++	usart_puts("\nEdited by hak8or!\n");
++	usart_puts("Yey custom code execution and toolchain verification! :D\n");
++	usart_puts("======--======--======--======\n");
+ }
+ 
+ int main(void)
+@@ -97,6 +96,9 @@ int main(void)
+ 	memset(of_filename, 0, FILENAME_BUF_LEN);
+ 
+ 	image.dest = (unsigned char *)JUMP_ADDR;
++
++	usart_puts("\n\n\n\n==============================\n");
++
+ #ifdef CONFIG_OF_LIBFDT
+ 	image.of = 1;
+ 	image.of_dest = (unsigned char *)OF_ADDRESS;
+@@ -125,6 +127,7 @@ int main(void)
+ #endif
+ 
+ #ifdef CONFIG_DATAFLASH
++	usart_puts("Using Dataflash!\n");
+ 	media_str = "SF: ";
+ 	image.offset = IMG_ADDRESS;
+ #if !defined(CONFIG_LOAD_LINUX) && !defined(CONFIG_LOAD_ANDROID)
+@@ -169,6 +172,42 @@ int main(void)
+ 	image.dest -= sizeof(at91_secure_header_t);
+ #endif
+ 
++	// ==============================================================
++	// 					MEMORY TESTS
++	// ==============================================================
++	// const unsigned int* memory_map_base = 0x00000000;
++	unsigned char volatile * const DRAM_base =       0x20000000;
++	unsigned char volatile * const DRAM_top =        0x24000000;
++	unsigned char volatile * const test_file_loc =   0x20008400;
++	unsigned char volatile * const addr_to_jump =    JUMP_ADDR;
++
++	/*
++	if (short_mem_test())
++		usart_puts("         --- MEMORY TEST SUCCEDED! :D \n");
++	else
++		usart_puts("         --- MEMORY TEST FAILED! D: \n");
++	
++
++	if (1) {
++		if (simple_pattern_mem_test())
++			usart_puts("         --- Simple Pattern MEMORY TEST SUCCEDED! :D \n");
++		else
++			usart_puts("         --- Simple Pattern MEMORY TEST FAILED! D: \n");
++	}
++
++	if (1) {
++		if (full_mem_test_pattern(0x00))
++			usart_puts("         --- Simple Pattern MEMORY TEST SUCCEDED! :D \n");
++		else
++			usart_puts("         --- Simple Pattern MEMORY TEST FAILED! D: \n");
++	}
++	*/
++
++	// fill_mem(DRAM_base, DRAM_top, 0x00);
++	// ==============================================================
++	// 					MEMORY TESTS
++	// ==============================================================
++
+ 	ret = (*load_image)(&image);
+ 
+ #if defined(CONFIG_SECURE)
+@@ -181,7 +220,7 @@ int main(void)
+ 		usart_puts(media_str);
+ 
+ 	if (ret == 0){
+-		usart_puts("Done to load image\n");
++		usart_puts("Done loading image from SerialFlash\n");
+ 	}
+ 	if (ret == -1) {
+ 		usart_puts("Failed to load image\n");
+@@ -193,14 +232,313 @@ int main(void)
+ 	}
+ 
+ #ifdef CONFIG_SCLK
++	usart_puts("Switching to slow clock.\n");
+ 	slowclk_switch_osc32();
+ #endif
+ 
+ #if defined(CONFIG_ENTER_NWD)
++	usart_puts("switch_normal_world()\n");
+ 	switch_normal_world();
+ 
+ 	/* point never reached with TZ support */
+ #endif
+ 
++	// dump_memory(DRAM_base, DRAM_base + 100);
++
++	// Should have either arm exception vector of U-Boot or test file.
++	// dump_memory(test_file_loc, test_file_loc + 20);
++
++	// Should hold the U-Boot ARM exception vectors.
++	// dump_memory(addr_to_jump, addr_to_jump + (4 * 15));
++
++	// Jumping around wondering wtf is going on.
++	// dump_memory_raw(addr_to_jump + (0x8400 / 4), addr_to_jump + (0x8400 / 4) + 100);
++
++	// Should be used only for small memory chunks (115200 baud) like data_flash test file.
++	// find_none_zeroed_memory(DRAM_base, DRAM_top);
++
++	dbg_info("Jumping to JUMP_ADDR (%d) ...\n", JUMP_ADDR);
+ 	return JUMP_ADDR;
+ }
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++// ===============================================================
++// My mem testing routine
++int short_mem_test(void){
++	// Used to see contents of data at address.
++	unsigned int volatile *data = JUMP_ADDR;
++	unsigned int volatile * const DRAM_base = 0x20000000;
++	unsigned int volatile * const DRAM_top = 0x24000000;
++
++	usart_puts("Doing a quick memory test (SAM-BA says all is ok but just incase) ... \n");
++
++	dbg_info("Contents at %d : %d \n", JUMP_ADDR, *data);
++	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 4, *(data + 1));
++	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 8, *(data + 2));
++	dbg_info("Contents at %d : %d \n", DRAM_top - 2, *(DRAM_top - 2));
++	dbg_info("Contents at %d : %d \n", DRAM_top - 1, *(DRAM_top - 1));
++
++	dbg_info("Writing 0xF0F0F0FA, 0xB1B2B3B4, and 0xB1B2B3B4 to JUMP_ADDR.\n");
++	dbg_info("Writing 0x01234567 to last two words in DRAM..\n");
++
++	*data = 0xF0F0F0FA;
++	*(data + 1) = 0xB1B2B3B4;
++	*(data + 2) = 0xB1B2B3B4;
++	*(DRAM_top - 2) = 0x01234567;
++	*(DRAM_top - 1) = 0x01234567;
++
++	dbg_info("Contents at %d : %d \n", JUMP_ADDR, *data);
++	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 4, *(data + 1));
++	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 8, *(data + 2));
++	dbg_info("Contents at %d : %d \n", DRAM_top - 2, *(DRAM_top - 2));
++	dbg_info("Contents at %d : %d \n", DRAM_top - 1, *(DRAM_top - 1));
++
++
++	dbg_info("---^^^^^^--- done with short mem test\n");
++
++	if ( *data != 0xF0F0F0FA || *(data + 1) != 0xB1B2B3B4 || *(data + 2) != 0xB1B2B3B4 || *(DRAM_top - 2) != 0x01234567 || *(DRAM_top - 1) != 0x01234567)
++		return 0;
++	else
++		return 1;
++}
++
++int simple_pattern_mem_test(void) {
++	if (full_mem_test_pattern(0x00000000) != 1){
++		usart_puts("---- Failed test using 0x00 pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_pattern(0xFFFFFFFF) != 1){
++		usart_puts("---- Failed test using 0xFFFFFFFF pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_pattern(0x0F0F0FF0) != 1){
++		usart_puts("---- Failed test using 0x0F0F0FF0 pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_pattern(0x01234567) != 1){
++		usart_puts("---- Failed test using 0x01234567 pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_pattern(0x89ABCDE) != 1){
++		usart_puts("---- Failed test using 0x89ABCDE pattern! :( \n"); 
++		return 0;
++	}
++
++
++	if (full_mem_test_alternating_pattern(0x00000000) != 1){
++		usart_puts("---- Failed test using 0x00 pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_alternating_pattern(0xFFFFFFFF) != 1){
++		usart_puts("---- Failed test using 0xFFFFFFFF pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_alternating_pattern(0x0F0F0FF0) != 1){
++		usart_puts("---- Failed test using 0x0F0F0FF0 pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_alternating_pattern(0x01234567) != 1){
++		usart_puts("---- Failed test using 0x01234567 pattern! :( \n"); 
++		return 0;
++	}
++
++	if (full_mem_test_alternating_pattern(0x89ABCDE) != 1){
++		usart_puts("---- Failed test using 0x89ABCDE pattern! :( \n"); 
++		return 0;
++	}
++
++	// Test a looping pattern.
++	int incrementing_pattern = 0x00;
++	while (incrementing_pattern != 0xFFFFFFFF) {
++		if (full_mem_test_pattern(incrementing_pattern) != 1){
++			dbg_info("---- Failed test using %d pattern! :( \n", incrementing_pattern); 
++			return 0;
++		}
++
++		if (full_mem_test_alternating_pattern(incrementing_pattern) != 1){
++			dbg_info("---- Failed test using %d pattern! :( \n", incrementing_pattern); 
++			return 0;
++		}
++
++		incrementing_pattern++;
++	}
++
++	// Didn't exit early, so that means all is alright.
++	return 1;
++}
++
++int full_mem_test_pattern(unsigned int pattern){
++	dbg_info("Testing all of DRAM writing %d ... ", pattern);
++
++	// Some Const's
++	unsigned int volatile * const DRAM_base = 0x20000000;
++	unsigned int volatile * const DRAM_top = 0x24000000;
++	unsigned int volatile * index = 0x20000000;
++
++	// Writing to memory
++	while (index < DRAM_top) {
++		*index = pattern;
++		index++;
++	} index = 0x20000000;
++
++	// Writing to memory
++	while (index < DRAM_top) {
++		if (*index != pattern) {
++			dbg_info(" FAIL \n ---- Contents at %d : %d instead of %d \n", index, *index, pattern);
++			return 0;
++		}
++
++		index++;
++	}
++
++	// Didn't exit early, so that means all is alright.
++	dbg_info(" OK :) \n");
++	return 1;
++}
++
++int full_mem_test_alternating_pattern(unsigned int pattern){
++	dbg_info("Testing all of DRAM writing altnerating %d and %d ... ", pattern, ~pattern);
++
++	// Some Const's
++	unsigned int volatile * const DRAM_base = 0x20000000;
++	unsigned int volatile * const DRAM_top = 0x24000000;
++	unsigned int volatile * index = 0x20000000;
++
++	// Writing to memory
++	while (index < DRAM_top) {
++		*index = pattern;
++		*(index + 1) = ~pattern;
++		index = index + 2;
++	} index = 0x20000000;
++
++	// Writing to memory
++	while (index < DRAM_top) {
++		if ( *index != pattern && *(index + 1) != ~pattern) {
++			dbg_info(" FAIL \n ---- Contents at %d : %d instead of %d \n", index, *index, pattern);
++			dbg_info(" FAIL \n ---- Contents at %d : %d instead of %d \n", index + 1, *(index + 1), ~pattern);
++			return 0;
++		}
++
++		index = index + 2;
++	}
++
++	// Didn't exit early, so that means all is alright.
++	dbg_info(" OK :) \n");
++	return 1;
++}
++
++// Dump memory in 4 byte chunks, must be word (4 byte) aligned!
++void dump_memory(unsigned char volatile * const base, unsigned char volatile * const end){
++	unsigned char volatile *offset = base;
++
++	dbg_info("----- MEMORY DUMP -----    %x --> %x \n", base, end);
++	while (offset < end - 3) {
++		// Do some magic because this and my desktops endian'ness are opposits.
++		volatile char num[4] = {*offset, *(offset + 1), *(offset + 2), *(offset + 2)};
++
++		long output = num[3] | num[2] << 8 | num[1] << 16 | num[0] << 24;
++
++		dbg_info("Contents at %x : %x \n", offset, output);
++
++		offset = offset + 4;
++	}
++}
++
++// Dump memory in 4 byte chunks, must be word (4 byte) aligned!
++void dump_memory_raw(unsigned char volatile * const base, unsigned char volatile * const end){
++	unsigned char volatile *offset = base;
++
++	dbg_info("----- MEMORY DUMP -----    %x --> %x \n", base, end);
++	while (offset < end - 3) {
++		// Do some magic because this and my desktops endian'ness are opposits.
++		volatile char num[4] = {*offset, *(offset + 1), *(offset + 2), *(offset + 2)};
++
++		long output = num[3] | num[2] << 8 | num[1] << 16 | num[0] << 24;
++
++		dbg_info("%x \n", output);
++
++		offset = offset + 4;
++	}
++}
++
++void fill_mem(unsigned char volatile * const base, unsigned char volatile * const top, const unsigned char pattern){
++	unsigned char volatile *offset = base;
++
++	dbg_info("Filling all of DRAM with %d ... ", pattern);
++
++	while (offset < top) {
++		*offset = pattern; 
++		offset++; 
++	}
++
++	dbg_info(" OK \n");
++}
++
++void find_none_FF_memory(unsigned char volatile * const base, unsigned char volatile * const top){
++	unsigned char volatile *offset = base;
++
++	while (offset < top) {
++		// Do some magic because this and my desktops endian'ness are opposits.
++		volatile char num[4] = {*offset, *(offset + 1), *(offset + 2), *(offset + 3)};
++
++		long output = num[3] | num[2] << 8 | num[1] << 16 | num[0] << 24;
++
++		if (output != 0xFFFFFFFF)
++			dbg_info("Contents at %x : %x \n", offset, *offset);
++
++		offset = offset + 4;
++	}
++}
++
++void find_none_zeroed_memory(unsigned char volatile * const base, unsigned char volatile * const top){
++	unsigned char volatile *offset = base;
++
++	dbg_info("Looking for modified memory. \n");
++
++	while (offset < top) {
++		// Do some magic because this and my desktops endian'ness are opposits.
++		volatile char num[4] = {*offset, *(offset + 1), *(offset + 2), *(offset + 3)};
++
++		long output = num[3] | num[2] << 8 | num[1] << 16 | num[0] << 24;
++
++		if (output != 0x00)
++			dbg_info("Contents at %x : %x \n", offset, output);
++
++		offset = offset + 4;
++	}
++}
+\ No newline at end of file
+-- 
+2.1.0
+

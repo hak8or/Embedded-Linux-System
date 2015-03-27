@@ -1,0 +1,30 @@
+From 75001ff2ba862f50bda168e33e6c753121751d40 Mon Sep 17 00:00:00 2001
+From: hak8or <hak8or@gmail.com>
+Date: Fri, 27 Mar 2015 02:17:02 -0400
+Subject: [PATCH 4/5] Added debug prompts to SPI init (MCLK, SPI speed, etc).
+
+---
+ driver/at91_spi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/driver/at91_spi.c b/driver/at91_spi.c
+index 3ecb128..95d5ac4 100644
+--- a/driver/at91_spi.c
++++ b/driver/at91_spi.c
+@@ -97,7 +97,13 @@ int at91_spi_init(unsigned int pcs, unsigned int clock, unsigned int mode)
+ 	if (!clock)
+ 		return -1;
+ 
++	dbg_info("MASTER_CLOCK (MCLK): %d \n", MASTER_CLOCK);
++	dbg_info("SPI clock rate requested: %d \n", clock);
++
+ 	scbr = div(MASTER_CLOCK, clock);
++
++	dbg_info("scbr: %d \n", scbr);
++
+ 	reg = AT91C_SPI_SCBR(scbr);
+ 	reg |= AT91C_SPI_BITS_8;
+ 
+-- 
+2.1.0
+

@@ -1,0 +1,66 @@
+From 7627b9b3adfd97ea31cb1e8ea75907a43bc6b088 Mon Sep 17 00:00:00 2001
+From: hak8or <hak8or@gmail.com>
+Date: Fri, 27 Mar 2015 02:15:31 -0400
+Subject: [PATCH 3/5] Relaxed DRAM timings and changed 8 to 4 banks
+
+---
+ board/at91sam9n12ek/at91sam9n12ek.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/board/at91sam9n12ek/at91sam9n12ek.c b/board/at91sam9n12ek/at91sam9n12ek.c
+index 1c9bd86..14f071e 100644
+--- a/board/at91sam9n12ek/at91sam9n12ek.c
++++ b/board/at91sam9n12ek/at91sam9n12ek.c
+@@ -79,7 +79,7 @@ static void ddramc_reg_config(struct ddramc_register *ddramc_config)
+ 	ddramc_config->cr = (AT91C_DDRC2_NC_DDR10_SDR9	// 10 column bits (1K)
+ 				| AT91C_DDRC2_NR_13	// 13 row bits    (8K)
+ 				| AT91C_DDRC2_CAS_3	// CAS Latency 3
+-				| AT91C_DDRC2_NB_BANKS_8	// 8 banks
++				| AT91C_DDRC2_NB_BANKS_4	// 4 banks
+ 				| AT91C_DDRC2_DLL_RESET_DISABLED	// DLL not reset
+ 				| AT91C_DDRC2_DECOD_INTERLEAVED);	// Interleaved decoding
+ 
+@@ -88,28 +88,30 @@ static void ddramc_reg_config(struct ddramc_register *ddramc_config)
+ 	 * With a 133 MHz frequency, the refresh timer count register must to be
+ 	 * set with (15.625 x 133 MHz) ~ 2084 i.e. 0x824
+ 	 * or (7.81 x 133 MHz) ~ 1040 i.e. 0x410.
++	 * 
++	 * This was changed to have a clock of 100 Mhz by hak8or, ignore above.
+ 	 */
+-	ddramc_config->rtr = 0x411;	/* Refresh timer: 7.8125us */
++	ddramc_config->rtr = 0x30D;	/* Refresh timer: 7.8125us */
+ 
+-	/* One clock cycle @ 133 MHz = 7.5 ns */
+-	ddramc_config->t0pr = (AT91C_DDRC2_TRAS_(6)
++	/* One clock cycle @ 100 MHz = 10 ns */
++	ddramc_config->t0pr = (AT91C_DDRC2_TRAS_(5)
+ 				| AT91C_DDRC2_TRCD_(2)
+ 				| AT91C_DDRC2_TWR_(2)
+-				| AT91C_DDRC2_TRC_(8)
++				| AT91C_DDRC2_TRC_(6)
+ 				| AT91C_DDRC2_TRP_(2)
+-				| AT91C_DDRC2_TRRD_(2)
++				| AT91C_DDRC2_TRRD_(1)
+ 				| AT91C_DDRC2_TWTR_(2)
+ 				| AT91C_DDRC2_TMRD_(2));
+ 
+ 	ddramc_config->t1pr = (AT91C_DDRC2_TXP_(2)
+ 				| AT91C_DDRC2_TXSRD_(200)
+-				| AT91C_DDRC2_TXSNR_(19)
+-				| AT91C_DDRC2_TRFC_(18));
++				| AT91C_DDRC2_TXSNR_(12)
++				| AT91C_DDRC2_TRFC_(11));
+ 
+ 	ddramc_config->t2pr = (AT91C_DDRC2_TRTP_(2)
+-				| AT91C_DDRC2_TRPA_(3)
+-				| AT91C_DDRC2_TXARDS_(7)
+-				| AT91C_DDRC2_TXARD_(2));
++				| AT91C_DDRC2_TRPA_(2)
++				| AT91C_DDRC2_TXARDS_(8)
++				| AT91C_DDRC2_TXARD_(3));
+ }
+ 
+ static void ddramc_init(void)
+-- 
+2.1.0
+
