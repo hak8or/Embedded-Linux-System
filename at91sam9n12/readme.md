@@ -2,6 +2,9 @@
 
 Use the Atmel SAM9N12 [linux4sam](http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page) page for a general overview of the build process.
 
+### Status
+NAND flash doesn't work for some reason (probably thermally damaged it when using my garbage desoldering braid), so dataflash is used instead. The dataflash chip is attached to the SPI bus from the chip to the SPI bus pads while also using it's own board. DRAM is also underclocked to 100 Mhz instead of 133 Mhz, causing the processor to run at 300 Mhz instead of 400 Mhz. AT91 Bootstrap and U-Boot are located on dataflash at ```0x00``` and ```0x8400``` respectivly, with U-Boot pulling the kernel from a flash drive connected via USB OTG as well. The kernel then pulls the rootfs off the flash drive in a dedicated ext2 rootfs as rw. GCC has been cross compiled to this board and compiles programs correctly, so this board was used for completion of the project.
+
 ### Boot process
 - NVM bootloader: Primary bootloader which searches for executable code via arm exception vectors on NAND and Dataflash and elsewhere except USB
 - AT91bootstrap: Secondary bootloader which setups up DRAM looks and puts next executable code into top megabyte of DRAM.
