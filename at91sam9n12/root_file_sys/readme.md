@@ -1,6 +1,8 @@
 ### Getting started
 The rootfs is relativly simple to setup depending on how much you functionality you want.
 
+Also, [this](https://gist.github.com/eepp/6056325) amazing gist shows how to handle a rootfs with busybox, and while it's for the beaglebone the process is nearly indentical for sam9n12 after the kernel steps.
+
 #### Just Busybox
 If all you want is busybox and nothing else, then :
 - statically compile busybox and run a ```make install```
