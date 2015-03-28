@@ -1,5 +1,8 @@
 # Atmel SAM9N12 Embedded Linux System
 
+### Getting started
+Right now, you have to manually find and download all the needed dependancies. A script will hopefully be written someday to automate downloading and patching all the files.
+
 Use the Atmel SAM9N12 [linux4sam](http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page) page for a general overview of the build process.
 
 ### Status
@@ -32,5 +35,42 @@ A small 5 megabyte **ram file system** is made via rcS but it isn't needed and i
 ### Toolchain
 **Crosstools-NG** was indespensable for handling all toolchain issues. While ARM do offer their version of GCC on Launchpad which includes pending additions to mainline GCC, it is preferrable to make a custom cross-compiler to select what standard c library to use. Crosstools-NG can properly compile a cross compiler as well as handling the chicken and egg problem with the c library and compiler, but it takes a solid 30 minutes to make a cross-compiler. Then, using a [Canadian Build](https://github.com/crosstool-ng/crosstool-ng/blob/master/docs/6%20-%20Toolchain%20types.txt) (cross-native isn't currently supported), a cross-native compiler is compiled with the target tuple being the previously compiled cross-compiler, which takes roughly 45 minutes. In total, compiling a cross compiler and then a cross-native compiler using a normal build and then canadian build respectivly, takes roughly *an hour and fifteen minutes*.
 
-### Getting started
-Right now, you have to manually find and download all the needed dependancies. A script will hopefully be written someday to automate downloading and patching all the files.
+### Resources blob from OneTab
+- [LegacySAM9N12Page < Linux4SAM < TWiki](http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page#Linux_Kernel)
+- [Booting The Linux Kernel | STLinux](http://www.stlinux.com/?q=node/119/#RAMDiskBoot)
+- [UBootEnvVariables < DULG < DENX](http://www.denx.de/wiki/view/DULG/UBootEnvVariables)
+- [Booting The Linux Kernel | STLinux](http://www.stlinux.com/u-boot/kernel-booting)
+- [bootloaders:u-boot:usb Analog Devices Open Source | Mixed-signal and Digital Signal Processing ICs](http://blackfin.uclinux.org/doku.php?id=bootloaders:u-boot:usb)
+- [A Handy U-Boot Trick | Linux Journal](http://www.linuxjournal.com/content/handy-u-boot-trick)
+- [KernelBuild - Linux Kernel Newbies](http://kernelnewbies.org/KernelBuild)
+- [Ttl/sam_board](https://github.com/Ttl/sam_board)
+- [sam_board/sam_board.patch at master · Ttl/sam_board](https://github.com/Ttl/sam_board/blob/master/software/at91bootstrap/sam_board.patch)
+- [U-Boot < Linux4SAM < TWiki](http://www.at91.com/linux4sam/bin/view/Linux4SAM/U-Boot)
+- [LegacyU-Boot < Linux4SAM < TWiki](http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacyU-Boot#DataFlash)
+- [AT91Bootstrap < Linux4SAM < TWiki](http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap#Boot_capabilities_matrix)
+- [LegacySAM9N12Page < Linux4SAM < TWiki](http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page)
+- [Aria G25 256MB boot problem - Google Groups](https://groups.google.com/forum/#!topic/acmesystems/NeXjxqVJZcU)
+- [Building U-Boot and Linux 3.11 from scratch for the BeagleBone, and booting](https://gist.github.com/eepp/6056325)
+- [MT46V32M16P-5B:J - Micron Technology, DRAM Chip. Order from Arrow Electronics.](http://parts.arrow.com/item/detail/micron-technology/mt46v32m16p-5bj#Qncy)
+- [Sourcery CodeBench Lite 2014.05-29 for ARM GNU/Linux](https://sourcery.mentor.com/GNUToolchain/release2795?)
+- [Gentoo Forums :: View topic - VFS: Cannot open root device "sda2" or unknown-block(0,0) ..](http://forums.gentoo.org/viewtopic-p-6384064.html?sid=8e84f81ab9bbf668c2eefb6b9a4266a0)
+- [0x6: Root file system for embedded system - Linux geek's scratchpad](http://pietrushnic.github.io/blog/2013/06/07/root-file-system-for-embedded-system/)
+- [busybox Inittab](http://git.busybox.net/busybox/tree/examples/inittab)
+- [BusyBox - The Swiss Army Knife of Embedded Linux](http://www.busybox.net/downloads/BusyBox.html)
+- [How do I check busybox version (from busybox)? - Unix & Linux Stack Exchange](http://unix.stackexchange.com/questions/15895/how-do-i-check-busybox-version-from-busybox)
+- [android - How to compile Busybox? - Stack Overflow](http://stackoverflow.com/questions/22409516/how-to-compile-busybox)
+- [BusyBox simplifies embedded Linux systems](http://www.ibm.com/developerworks/library/l-busybox/)
+- [Cross Compiling BusyBox for ARM - BeyondLogic](http://wiki.beyondlogic.org/index.php?title=Cross_Compiling_BusyBox_for_ARM)
+- [Re: [patches] Cross-building instructions](http://www.eglibc.org/archives/patches/msg00078.html)
+- [How to Build a GCC Cross-Compiler](http://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/)
+- [How To Cross-Compile Clang/LLVM using Clang/LLVM — LLVM 3.7 documentation](http://llvm.org/docs/HowToCrossCompileLLVM.html)
+- [Cross-Compiling for the Raspberry Pi](https://mborgerson.com/cross-compiling-for-the-raspberry-pi/)
+- [Bryan Hundven - Re: Cross compile native gcc for arm with crosstool-ng, have toolchain,](https://sourceware.org/ml/crossgcc/2012-11/msg00016.html)
+- [Linux in Android! DesirAPT is at Beta Test! - Post #5 - XDA Forums](http://forum.xda-developers.com/showpost.php?p=18356849&postcount=5)
+- [Crosstool-NG](http://crosstool-ng.org/)
+- [crosstool-ng/1 - Introduction.txt at master · crosstool-ng/crosstool-ng](https://github.com/crosstool-ng/crosstool-ng/blob/master/docs/1%20-%20Introduction.txt)
+- [dayid's screen and tmux cheat sheet](http://www.dayid.org/os/notes/tm.html)
+- [enable multithreading to use std::thread: operation not permitted arm at DuckDuckGo](https://duckduckgo.com/?q=enable+multithreading+to+use+std%3A%3Athread%3A+operation+not+permitted+arm&t=ffsb)
+- [multithreading - C++ Threads, std::system_error - operation not permitted? - Stack Overflow](http://stackoverflow.com/questions/17274032/c-threads-stdsystem-error-operation-not-permitted)
+- [c++ - version `CXXABI_1.3.8' not found (required by ...) - Stack Overflow](http://stackoverflow.com/questions/23494103/version-cxxabi-1-3-8-not-found-required-by)
+- [embedded linux - When we build a kernel and busy box, we need toolchain only for busybox not for kernel? - Stack Overflow](http://stackoverflow.com/questions/17785208/when-we-build-a-kernel-and-busy-box-we-need-toolchain-only-for-busybox-not-for)
