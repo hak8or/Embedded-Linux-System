@@ -1,0 +1,239 @@
+===========================
+Starting device from _start
+===========================
+hak8or PowerPrep start initialize power...
+Battery Voltage = 1.62VNo battery or bad battery detected! Disabling battery voltage measurements.
+raise battery brownout level to programmed value
+Switch the Vddd power source to DCDC instead of the linear regulator
+Finished PowerPrep_ConfigurePowerSource
+LLCFeb  1 201519:34:19
+turnon_mem_rail at 2.5v
+EMI_CTRL 0x1C084040
+FRAC 0x92925E92
+Initilizing the 96 Mhz DRAM you want :D
+init_ddr_mt46v32m16_96Mhz
+power 0x00820710
+Frac 0x92925E92
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+Done with normal _start routine
+
+Running just read tests.
+mem 0x40000000 => 0x0F0F0F0F
+mem 0x40000004 => 0x0F0F0F0F
+mem 0x40000008 => 0x0F0F0F0F
+mem 0x4000000C => 0x0F0F0F0F
+mem 0x40000010 => 0x0F0F0F0F
+mem 0x40000014 => 0x0F0F0F0F
+mem 0x40000018 => 0x0F0F0F0F
+mem 0x4000001C => 0x0F0F0F0F
+mem 0x40000020 => 0x0F0F0F0F
+mem 0x40000024 => 0x0F0F0F0F
+mem 0x40000028 => 0x0F0F0F0F
+
+=========== Test pass 0 ===========
+Filling it with 0 and checking right after.
+-- current mem: Addr 0x40000000 -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000004 -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000008 -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x4000000C -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000010 -> 0x00000000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000014 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000018 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x4000001C -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000020 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000024 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000028 -> 0xE1A00000
+         Filling with: 0x00000000
+Filling it with 0xffffffff and checking right after.
+-- current mem: Addr 0x40000000 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000004 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000008 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x4000000C -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000010 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000014 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000018 -> 0xFFFFFFFF
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x4000001C -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000020 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000024 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000028 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+
+=========== Test pass 1 ===========
+Filling it with altnerating data and checking right after.
+-- current mem: Addr 0x40000000 -> 0xFFFFFFFF
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000004 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000008 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x4000000C -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000010 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000014 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000018 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x4000001C -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000020 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000024 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000028 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+Exiting _status ...
+LLLLLLLFCLJ
+Data Abort
+r14_HTLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLFC
+
+===========================
+Starting device from _start
+===========================
+hak8or PowerPrep start initialize power...
+Battery Voltage = 1.62VNo battery or bad battery detected! Disabling battery voltage measurements.
+raise battery brownout level to programmed value
+Switch the Vddd power source to DCDC instead of the linear regulator
+Finished PowerPrep_ConfigurePowerSource
+LLCFeb  1 201519:34:19
+turnon_mem_rail at 2.5v
+EMI_CTRL 0x1C084040
+FRAC 0x92925E92
+Initilizing the 96 Mhz DRAM you want :D
+init_ddr_mt46v32m16_96Mhz
+power 0x00820710
+Frac 0x92925E92
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+Done with normal _start routine
+
+Running just read tests.
+mem 0x40000000 => 0x0F0F0F0F
+mem 0x40000004 => 0x0F0F0F0F
+mem 0x40000008 => 0x0F0F0F0F
+mem 0x4000000C => 0x0F0F0F0F
+mem 0x40000010 => 0x0F0F0F0F
+mem 0x40000014 => 0x0F0F0F0F
+mem 0x40000018 => 0x0F0F0F0F
+mem 0x4000001C => 0x0F0F0F0F
+mem 0x40000020 => 0x0F0F0F0F
+mem 0x40000024 => 0x0F0F0F0F
+mem 0x40000028 => 0x0F0F0F0F
+
+=========== Test pass 0 ===========
+Filling it with 0 and checking right after.
+-- current mem: Addr 0x40000000 -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000004 -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000008 -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x4000000C -> 0x0F0F0F0F
+         Filling with: 0x00000000
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000010 -> 0x00000000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000014 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000018 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x4000001C -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000020 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000024 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000028 -> 0xE1A00000
+         Filling with: 0x00000000
+Filling it with 0xffffffff and checking right after.
+-- current mem: Addr 0x40000000 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000004 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000008 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x4000000C -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000010 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000014 -> 0x00000000
+         Filling with: 0xFFFFFFFF
+         !!Error!! Got: 0xE1A00000
+-- current mem: Addr 0x40000018 -> 0xFFFFFFFF
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x4000001C -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000020 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000024 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000028 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+
+=========== Test pass 1 ===========
+Filling it with altnerating data and checking right after.
+-- current mem: Addr 0x40000000 -> 0xFFFFFFFF
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000004 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000008 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x4000000C -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000010 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000014 -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000018 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x4000001C -> 0xE1A00000
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000020 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+-- current mem: Addr 0x40000024 -> 0xFFFFFFFF
+         Filling with: 0x00000000
+-- current mem: Addr 0x40000028 -> 0xE1A00000
+         Filling with: 0xFFFFFFFF
+Exiting _status ...
+LLLLLLLFCL

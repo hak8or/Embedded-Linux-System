@@ -1,0 +1,239 @@
+
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCHTLCHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Data Abort
+r14_HTLCHTLCHTLCLC
+Data Abort
+r14_HTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCLC▒▒
+Undefined Instruction
+r14_unHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+SWI
+
+r14_HTLCLC
+Undefined Instruction
+r14_unHTLCHTLCLC
+Undefined Instruction
+r14_unHTLC0x8020a014
+▒▒▒▒▒▒ɲHHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCHTLCHTLCHTLCHTLCHTLCHTLCHTLCHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCHTLCLC
+Undefined Instruction
+r14_unHTLCHTLCHTLC
+PowerPrep start initialize power...
+Battery Voltage = 0.72V
+No battery or bad battery                                       detected!!!.Disa                                                                         bling battery                                   voltage measurements./r/nJul 29                                                                          201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disa                                                                         bling battery                                   voltage ▒
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disa                                                                         bling battery                                   voltage measurements./r/nJul 29                                                                          201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disa                                                                         bling battery                                   voltage measurements./r/nJul 29                                                                          201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disa                                                                         bling battery                                   voltage measurements./r/nJul 29                                                                          201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+▒
+PowerPrep start initialize power...
+Battery Voltage = 0.71V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.62V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage ▒
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage ▒
+PowerPrep start initialize power...
+Battery Voltage = 1.63V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.62V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+▒
+PowerPrep start initialize power...
+Battery Voltage = 0.84V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Undefined Instruction
+r14_un
+PowerPrep start initialize power...
+Battery Voltage = 1.62V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+PowerPrep start initialize power...
+Battery Voltage = 0.70V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.62V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
+
+Data Abort
+r14_
+PowerPrep start initialize power...
+Battery Voltage = 1.62V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage ▒
+PowerPrep start initialize power...
+Battery Voltage = 1.62V
+No battery or bad battery                                       detected!!!.Disabling battery                                   voltage measurements./r/nJul 29 201008:42:31
+EMI_CTRL 0x1C084040
+FRAC 0x92926192
+init_ddr_mt46v32m16_133Mhz
+power 0x00820710
+Frac 0x92926192
+start change cpu freq
+hbus 0x00000003
+cpu 0x00010001
