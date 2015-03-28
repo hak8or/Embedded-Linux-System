@@ -1,0 +1,54 @@
+hak8or@ubuntu:~/Desktop/toolchain_setup/crosstool-ng-crosstool-ng-1.20.0$ ./ct-ng build
+[INFO ]  Performing some trivial sanity checks
+[INFO ]  Build started 20150322.140851
+[INFO ]  Building environment variables
+[INFO ]  =================================================================
+[INFO ]  Retrieving needed toolchain components' tarballs
+[INFO ]  Retrieving needed toolchain components' tarballs: done in 90.31s (at 01:43)
+[INFO ]  =================================================================
+[INFO ]  Extracting and patching toolchain components
+[INFO ]  Extracting and patching toolchain components: done in 54.14s (at 02:37)
+[INFO ]  =================================================================
+[INFO ]  Installing GMP for host
+[INFO ]  Installing GMP for host: done in 43.05s (at 03:20)
+[INFO ]  =================================================================
+[INFO ]  Installing MPFR for host
+[INFO ]  Installing MPFR for host: done in 15.81s (at 03:36)
+[INFO ]  =================================================================
+[INFO ]  Installing ISL for host
+[INFO ]  Installing ISL for host: done in 24.46s (at 04:00)
+[INFO ]  =================================================================
+[INFO ]  Installing CLooG for host
+[INFO ]  Installing CLooG for host: done in 6.35s (at 04:07)
+[INFO ]  =================================================================
+[INFO ]  Installing MPC for host
+[INFO ]  Installing MPC for host: done in 6.18s (at 04:13)
+[INFO ]  =================================================================
+[INFO ]  Installing binutils for host
+[INFO ]  Installing binutils for host: done in 50.75s (at 05:04)
+[INFO ]  =================================================================
+[INFO ]  Installing pass-1 core C compiler
+[INFO ]  Installing pass-1 core C compiler: done in 218.88s (at 08:43)
+[INFO ]  =================================================================
+[INFO ]  Installing kernel headers
+[INFO ]  Installing kernel headers: done in 8.28s (at 08:51)
+[INFO ]  =================================================================
+[INFO ]  Installing C library headers & start files
+[INFO ]  Installing C library headers & start files: done in 13.10s (at 09:04)
+[INFO ]  =================================================================
+[INFO ]  Installing pass-2 core C compiler
+[INFO ]  Installing pass-2 core C compiler: done in 307.88s (at 14:12)
+[INFO ]  =================================================================
+[INFO ]  Installing C library
+[INFO ]  Installing C library: done in 248.27s (at 18:20)
+[INFO ]  =================================================================
+[INFO ]  Installing final compiler
+[INFO ]  Installing final compiler: done in 527.87s (at 27:08)
+[INFO ]  =================================================================
+[INFO ]  Cleaning-up the toolchain's directory
+[INFO ]    Stripping all toolchain executables
+[INFO ]  Cleaning-up the toolchain's directory: done in 7.38s (at 27:15)
+[INFO ]  Build completed at 20150322.143607
+[INFO ]  (elapsed: 27:15.29)
+[INFO ]  Finishing installation (may take a few seconds)...
+[27:16] / hak8or@ubuntu:~/Desktop/toolchain_setup/crosstool-ng-crosstool-ng-1.20.0$ 

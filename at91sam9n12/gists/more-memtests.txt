@@ -1,0 +1,114 @@
+RomBOOT
+Start AT91Bootstrap...
+Init DDR... Done!
+Downloading image...
+detected dataflash id = 0x1f 0x25 0x0 0x1 0x0.
+Done!
+RomBOOT
+-I- -- NandFlash SAM-BA applet 2.14 --
+-I- -- SAM9N12-EK
+-I- INIT command
+-I- Checking if NandIsOnficompatible.
+-I- Got bad ONFI response. :(
+-I- onfi_param_table[0]: 0x30 or 0
+-I- onfi_param_table[1]: 0xFF or ▒
+-I- onfi_param_table[2]: 0xFF or ▒
+-I- onfi_param_table[3]: 0xFF or ▒
+-I- Checking if NandIsOnficompatible.
+-I- Got bad ONFI response. :(
+-I- onfi_param_table[0]: 0x20 or
+-I- onfi_param_table[1]: 0x20 or
+-I- onfi_param_table[2]: 0x20 or
+-I- onfi_param_table[3]: 0x20 or
+-I-     Device Unknown due to no EBI detect
+-I-     End of applet (command : 0 --- status : 1)
+-I- -- DataFlash AT45 Applet 2.14 --
+-I- -- SAM9N12-EK
+-I- SPI and at45 drivers initialized
+-I- Device Unknown
+-I-     End of applet (command : 0 --- status : 1)
+-I- -- DataFlash AT45 Applet 2.14 --
+-I- -- SAM9N12-EK
+-I- SPI and at45 drivers initialized
+-I- AT45DB081D numPages : 0x1000 bufferAddr : 0x20008384
+-I-     End of applet (command : 0 --- status : 0)
+
+
+***** A bit later ****
+Comment: I can boot the AT91 bootstrap compiled by myself!! :D :D :D
+This means my toolchain is setup right and whatnot!
+ Sadly it seems my u-boot isn't good, so time to fiddle a bit with that too.
+
+-I-     End of applet (command : 3 --- status : 0)
+-I- READ at offset: 0x43080 buffer at : 0x20008384 of: 0x18c0 Bytes
+-I- READ return byte read : 0x18c0 Bytes
+-I-     End of applet (command : 3 --- status : 0)
+-I- READ at offset: 0x44940 buffer at : 0x20008384 of: 0x448 Bytes
+-I- READ return byte read : 0x448 Bytes
+-I-     End of applet (command : 3 --- status : 0)
+▒RomBOOT
+
+
+AT91Bootstrap 3.7.1-00054-gef803bb (Tue Feb 24 22:17:05 PST 2015)
+
+SF: Got Manufacturer and Device ID:0x1f 0x25 0x0 0x1 0x0
+SF: Copy 0x80000 bytes from 0x8400 to 0x26f00000
+SF: Done to load image
+
+
+AT91Bootstrap 3.7.1-00054-gef803bb (Tue Feb 24 22:17:05 PST 2015)
+
+SF: Got Manufacturer and Device ID:0x1f 0x25 0x0 0x1 0x0
+SF: Copy 0x80000 bytes from 0x8400 to 0x26f00000
+SF: Done to load image
+
+**** And even later, checking if u-boot is loading correctly from dataflash ****
+==============================
+Using Dataflash!
+ ba_offset = 0xb ...
+AT91Bootstrap 3.7.1-00054-gef803bb-dirty (Wed Feb 25 12:32:18 PST 2015)
+Edited by hak8or!
+Yey custom code execution and toolchain verification! :D
+======--======--======--======
+SF: Got Manufacturer and Device ID:0x1f 0x25 0x0 0x1 0x0
+SF: Copy 0x80000 bytes from 0x8400 to 0x22000000
+SF: Done to load image
+Contents at 0x22000000 : 0xffffffff
+                 0xffffffff
+                 0xffffffff
+Jumping to 0x22000000 ...
+
+**** later some more, adding better tests ****
+
+
+==============================
+Using Dataflash!
+ ba_offset = 0xb ...
+AT91Bootstrap 3.7.1-00054-gef803bb-dirty (Wed Feb 25 15:08:45 PST 2015)
+Edited by hak8or!
+Yey custom code execution and toolchain verification! :D
+======--======--======--======
+Doing a quick memory test (SAM-BA says all is ok but just incase) ...
+Contents at 0x22000000 : 0xeb00abc8
+Contents at 0x22000004 : 0xe3a01000
+Contents at 0x22000008 : 0xe3a02010
+Contents at 0x23fffff8 : 0x1234567
+Contents at 0x23fffffc : 0x1234567
+Writing 0xF0F0F0FA, 0xB1B2B3B4, and 0xB1B2B3B4 to JUMP_ADDR.
+Writing 0x01234567 to last two words in DRAM..
+Contents at 0x22000000 : 0xf0f0f0fa
+Contents at 0x22000004 : 0xb1b2b3b4
+Contents at 0x22000008 : 0xb1b2b3b4
+Contents at 0x23fffff8 : 0x1234567
+Contents at 0x23fffffc : 0x1234567
+         --- MEMORY TEST SUCCEDED! :D
+---^^^^^^--- done with mem test
+SF: Got Manufacturer and Device ID:0x1f 0x25 0x0 0x1 0x0
+SF: Copy 0x80000 bytes from 0x8400 to 0x22000000
+SF: Done to load image
+Contents at 0x22000000 : 0xeb00abc8
+Contents at 0x22000004 : 0xe3a01000
+Contents at 0x22000008 : 0xe3a02010
+Contents at 0x23fffff8 : 0x1234567
+Contents at 0x23fffffc : 0x1234567
+Jumping to JUMP_ADDR (0x22000000) ...

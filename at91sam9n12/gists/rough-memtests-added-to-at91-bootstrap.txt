@@ -1,0 +1,48 @@
+	// Put me in display banner!
+	char *version = "AT91Bootstrap";
+	char *ver_num = " "AT91BOOTSTRAP_VERSION" ("COMPILE_TIME")";
+
+	usart_puts(version);
+	usart_puts(ver_num);
+	usart_puts("\nEdited by hak8or!\n");
+	usart_puts("Yey custom code execution and toolchain verification! :D\n");
+	usart_puts("======--======--======--======\n");
+
+
+
+	// ==============================================
+	// Used to see contents of data at address.
+	int* data = JUMP_ADDR;
+	int* DRAM_top = 0x24000000;
+
+	dbg_info("Doing a quick memory test (SAM-BA says all is ok but just incase) ... \n");
+
+	dbg_info("Contents at %d : %d \n", JUMP_ADDR, *data);
+	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 4, *(data + 1));
+	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 8, *(data + 2));
+	dbg_info("Contents at %d : %d \n", DRAM_top - 2, *(DRAM_top - 2));
+	dbg_info("Contents at %d : %d \n", DRAM_top - 1, *(DRAM_top - 1));
+
+	dbg_info("Writing 0xF0F0F0FA, 0xB1B2B3B4, and 0xB1B2B3B4 to JUMP_ADDR.\n");
+	dbg_info("Writing 0x01234567 to last two words in DRAM..\n");
+
+	*data = 0xF0F0F0FA;
+	*(data + 1) = 0xB1B2B3B4;
+	*(data + 2) = 0xB1B2B3B4;
+	*(DRAM_top - 2) = 0x01234567;
+	*(DRAM_top - 1) = 0x01234567;
+
+	dbg_info("Contents at %d : %d \n", JUMP_ADDR, *data);
+	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 4, *(data + 1));
+	dbg_info("Contents at %d : %d \n", JUMP_ADDR + 8, *(data + 2));
+	dbg_info("Contents at %d : %d \n", DRAM_top - 2, *(DRAM_top - 2));
+	dbg_info("Contents at %d : %d \n", DRAM_top - 1, *(DRAM_top - 1));
+
+	if ( *data != 0xF0F0F0FA || *(data + 1) != 0xB1B2B3B4 || *(data + 2) != 0xB1B2B3B4 || *(DRAM_top - 2) != 0x01234567 || *(DRAM_top - 1) != 0x01234567)
+		dbg_info("         --- MEMORY TEST FAILED! D: \n");
+	else
+		dbg_info("         --- MEMORY TEST SUCCEDED! :D \n");
+
+	dbg_info("---^^^^^^--- done with mem test\n");
+	// Put me right before init_loadfunction();
+	// ==============================================

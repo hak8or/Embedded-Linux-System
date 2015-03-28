@@ -1,0 +1,86 @@
+Contents at 0x2005d8f8 : 0xffffffff
+Contents at 0x2005d8fc : 0xffffffff
+Jumping to JUMP_ADDR (0x20008400) ...
+
+
+U-Boot 2014.07-00058-gb44bde2-dirty (Mar 15 2015 - 01:53:35)
+
+CPU: AT91SAM9N12
+Crystal frequency:       16 MHz
+CPU clock        :  301.333 MHz
+Master clock     :  100.444 MHz
+DRAM:  64 MiB
+WARNING: Caches not enabled
+NAND:  atmel_nand: Fail to initialize #0 chip0 MiB
+MMC:   mci: 0
+SF: Detected AT45DB081D with page size 256 Bytes, erase size 4 KiB, total 1 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   ks8851_mll: Invalid chip id 0x30c0
+Board Net Initialization Failed
+No ethernet found.
+Hit any key to stop autoboot:  0
+SF: Detected AT45DB081D with page size 256 Bytes, erase size 4 KiB, total 1 MiB
+ERROR: attempting read past flash size (0x100000)
+Wrong Image Format for bootm command
+ERROR: can't get kernel image!
+U-Boot> ls
+Unknown command 'ls' - try 'help'
+U-Boot> usb start
+(Re)start USB...
+USB0:   scanning bus 0 for devices... 1 USB Device(s) found
+       scanning usb for storage devices... 0 Storage Device(s) found
+U-Boot> usb start
+(Re)start USB...
+USB0:   scanning bus 0 for devices... 2 USB Device(s) found
+       scanning usb for storage devices... 1 Storage Device(s) found
+U-Boot> usb info
+1: Hub,  USB Revision 1.10
+ -  U-Boot Root Hub
+ - Class: Hub
+ - PacketSize: 8  Configurations: 1
+ - Vendor: 0x0000  Product 0x0000 Version 0.0
+   Configuration: 1
+   - Interfaces: 1 Self Powered 0mA
+     Interface: 0
+     - Alternate Setting 0, Endpoints: 1
+     - Class Hub
+     - Endpoint 1 In Interrupt MaxPacket 2 Interval 255ms
+
+2: Mass Storage,  USB Revision 2.0
+ - OCZ DIESEL 50E69116000688
+ - Class: (from Interface) Mass Storage
+ - PacketSize: 64  Configurations: 1
+ - Vendor: 0x13fe  Product 0x1f00 Version 1.16
+   Configuration: 1
+   - Interfaces: 1 Bus Powered 100mA
+     Interface: 0
+     - Alternate Setting 0, Endpoints: 2
+     - Class Mass Storage, Transp. SCSI, Bulk only
+     - Endpoint 1 In Bulk MaxPacket 64
+     - Endpoint 2 Out Bulk MaxPacket 64
+
+U-Boot> ubifs
+Unknown command 'ubifs' - try 'help'
+U-Boot> usb storage
+  Device 0: Vendor: OCZ      Rev: PMAP Prod: DIESEL
+            Type: Removable Hard Disk
+            Capacity: 15296.0 MB = 14.9 GB (31326208 x 512)
+U-Boot> usb part
+
+Partition Map for USB device 0  --   Partition Type: DOS
+
+Part    Start Sector    Num Sectors     UUID            Type
+  1     1               31326206        00006cbc-01     07 Boot
+U-Boot> usb tree
+USB device tree:
+  1  Hub (12 Mb/s, 0mA)
+  |   U-Boot Root Hub
+  |
+  +-2  Mass Storage (12 Mb/s, 100mA)
+       OCZ DIESEL 50E69116000688
+
+U-Boot>
