@@ -10,6 +10,6 @@ Just a collection of gists over time I made for this. Some are scripts some are 
 
 ### UART logs
 - [Initial 4 layer redo boot log](initial-4-layer-redo-boot-log.txt)
-- [Memory test failure](http://pastebin.com/fjfwc1Bd)
-- [UART recovery mode log](mem-test-failure.txt)
+- [Memory test failure](mem-test-failure.txt)
+- [UART recovery mode log](UART-recovery-mode-log.txt)
 
