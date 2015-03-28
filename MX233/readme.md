@@ -1,5 +1,7 @@
 # Freescale I.MX233 Embedded Linux System
 
+![Front](images/DSC_9621_S.jpg)
+
 ### Status
 Currently not working due to issues with DRAM not seeming to be stable. Might have to mess with the timings a good bit more as well as lowering the clock from 133 Mhz to 100 Mhz.
 

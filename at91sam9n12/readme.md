@@ -1,5 +1,7 @@
 # Atmel SAM9N12 Embedded Linux System
 
+![Front](images/DSC_9624_S.jpg)
+
 ### Getting started
 Right now, you have to manually find and download all the needed dependancies. A script will hopefully be written someday to automate downloading and patching all the files.
 
