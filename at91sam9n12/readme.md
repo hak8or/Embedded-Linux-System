@@ -8,13 +8,13 @@ Right now, you have to manually find and download all the needed dependancies. A
 Use the Atmel SAM9N12 [linux4sam](http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page) page for a general overview of the build process.
 
 ### Status
-NAND flash doesn't work for some reason (probably thermally damaged it when using my garbage desoldering braid), so dataflash is used instead. The dataflash chip is attached to the SPI bus from the chip to the SPI bus pads while also using it's own board. DRAM is also underclocked to 100 Mhz instead of 133 Mhz, causing the processor to run at 300 Mhz instead of 400 Mhz. AT91 Bootstrap and U-Boot are located on dataflash at ```0x00``` and ```0x8400``` respectivly, with U-Boot pulling the kernel from a flash drive connected via USB OTG as well. The kernel then pulls the rootfs off the flash drive in a dedicated ext2 rootfs as rw. GCC has been cross compiled to this board and compiles programs correctly, so this board was used for completion of the project.
+NAND flash doesn't work for some reason (probably thermally damaged it when using my garbage desoldering braid), so dataflash is used instead. The dataflash chip is attached to the SPI bus from the chip to the SPI bus pads while also using it's own board. DRAM is also underclocked to 100 Mhz instead of 133 Mhz via the main system bus downclock, causing the processor to run at 300 Mhz instead of 400 Mhz. AT91 Bootstrap and U-Boot are located on dataflash at ```0x00``` and ```0x8400``` respectivly, with U-Boot pulling the kernel from a flash drive connected via USB OTG as well. The kernel then pulls the rootfs off the flash drive in a dedicated ext2 rootfs as rw (read write). GCC has been cross compiled to this board and compiles programs correctly, so this board was used for completion of the project.
 
 ### Boot process
-- NVM bootloader: Primary bootloader which searches for executable code via arm exception vectors on NAND and Dataflash and elsewhere except USB
-- AT91bootstrap: Secondary bootloader which setups up DRAM looks and puts next executable code into top megabyte of DRAM.
-- U-Boot: Third bootloader for getting loading linux kernel off USB into memory and passing proper args.
-- Linux Kernel: Indended application, runs the rootfs off USB (no copying into memory).
+- NVM bootloader: Primary bootloader which searches for executable code via Arm exception vectors on NAND and Dataflash and elsewhere except USB.
+- AT91bootstrap: Secondary bootloader which setups up DRAM and puts the next executable code (again, via ARM exception vectors) into DRAM.
+- U-Boot: Third bootloader for loading the linux kernel off USB and into memory while passing proper kernel boot arguments.
+- Linux Kernel: Indended application, runs the rootfs off USB (not copied into memory).
 
 ### Overview
 The **NVM bootloader** exists in ROM on the SAM9N12 and is the first thing executed upon powerup. This searches in for possible bootable storage mediums such as NAND, Dataflash, SPI, and others except USB, as well as sets up the serial port. If nothing was found then it starts up SAM-BA, which lets the SAM-BA client on a desktop to issue commands to the SAM9N12 over USB, this is used for writing both AT91 bootstrap and U-Boot to onboard dataflash.
