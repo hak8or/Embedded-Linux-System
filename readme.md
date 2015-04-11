@@ -5,3 +5,5 @@ The repository is divided into two SOC's, one being Atmel's AT91SAM9N12 which is
 
 ### Getting started
 Right now, you have to manually find and download all the needed dependancies. A script will hopefully be written someday to automate downloading and patching all the files.
+
+[Pictures](https://plus.google.com/photos/110672839466942103532/albums/6084477100140148161?authkey=CI7x0czR_vKqowE)
