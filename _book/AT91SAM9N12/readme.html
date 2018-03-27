@@ -1,0 +1,335 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>SAM9N12 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="SAMBA.html" />
+    
+    
+    <link rel="prev" href="../MX233/readme.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../MX233/readme.html">
+            
+                <a href="../MX233/readme.html">
+            
+                    
+                    MX233
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="readme.html">
+            
+                <a href="readme.html">
+            
+                    
+                    SAM9N12
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="SAMBA.html">
+            
+                <a href="SAMBA.html">
+            
+                    
+                    SAM-BA
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="AT91_Bootstrap.html">
+            
+                <a href="AT91_Bootstrap.html">
+            
+                    
+                    AT91 Bootstrap
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="OldSchool/readme.html">
+            
+                <a href="OldSchool/readme.html">
+            
+                    
+                    Old School
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >SAM9N12</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="atmel-sam9n12-embedded-linux-system">Atmel SAM9N12 Embedded Linux System</h1>
+<p><img src="images/DSC_9624_S.jpg" alt="Front"></p>
+<h2 id="description">Description</h2>
+<p>The SAM9N12 is a low cost MPU from Atmel (now Microchip) that is capable of running linux. It&apos;s based on a 400 MHz ARM926EJ-S core from ARM (very old, a far cry from what you can get in even the cheapest of phones or tablets) and has a 32 bit EBI (External Bus Interface) to work with SDRAM and NAND Flash. Also it can use SPI based FLASH for storing data and supports USB OTG letting you use a USB Flash drive as another data store.</p>
+<p>This board has:</p>
+<ul>
+<li>64 MB of DDR2-SDRAM (W9751G6KB-25-ND)</li>
+<li>4MB of Dataflash (AT45DB321E-SHF-B)</li>
+<li>USB OTG and USB Device broken out (both only up to 12 Mbps Full Speed)</li>
+</ul>
+<p>Originally this project was done years ago relying on forked branches of U-Boot and he Linux kernel from Atmel. While this did work, it meant having to use old non mainlined versions of each project. Later this project was restarted with the intention of using mainline sources for everything and BuildRoot to make things easier. The old version, dubbed &quot;Old School&quot; can be found <a href="OldSchool.md">here</a>, and shows how to do everything <strong>manually</strong>, meaning for example, compiling the linux kernel by hand and how to make a zImage. The old version also has the root filesystem on a USB Flash drive including a native GCC!</p>
+<p>This version (not Old School) will show the path of bringing a board like this up from start to finish, such as describing the intended boot flow, how to configure all the software (AT91 Bootstrap, Kernel, Root File System, BuildRoot, etc), show various bugs and issues found in the process (USB OTG was a fun one), how much space various functionality uses, and how to build a semi useful root file system (networking, Tmux, stress, htop, etc).</p>
+<h2 id="status">Status</h2>
+<p>Everything seems to work except NAND flash, likely due to soldering issues with the SAM9N12 BGA based package. Because NAND flash isn&apos;t working, it was decided to try and stick everything in the 32 Megabit Dataflash (yes, bootloader, kerenel, and root filesystem). USB OTG is used for a Wifi dongle so we get networking support.</p>
+<h2 id="boot-flow">Boot Flow</h2>
+<p>The AT91SAM9N12 has a bootloader in ROM which can boot from NAND Flash, SPI Flash, and SPI Dataflash, and can even boot directly into the linux kernel (therefore not needing U-Boot). There has been some reverse engineering work done on this <a href="http://hobbygenius.co.uk/blog/1622" target="_blank">here</a>.</p>
+<p>The memory setup we will be using is as follows:</p>
+<pre><code>AT45DB321E-SHF-B    32 Mbit -&gt;   4,325,376 Byte or 0x__42_0000 (8192 Pages * 528 Bytes)
+W9751G6KB-25-ND    512 MBit -&gt;  67,108,864 Byte or 0x_400_0000
+
+        Flash                                  Item                   DRAM
+0x000000 &lt;MAX: 0x0026D8&gt;                   AT91 bootstrap    -&gt;    Not Copied
+0x002800 &lt;MAX: 0x004B00&gt;                   Device Tree       -&gt;    0x2100_0000
+0x007300 &lt;MAX: 0x1D8D00 or 1,936,640B&gt;     zImage            -&gt;    0x2200_0000
+0x1E0000 &lt;MAX: 0x237C00 or 2,325,504B&gt;     RootFS            -&gt;    Not Copied
+0x417C00 &lt;MAX: 0x008400&gt;                   Non Volatile      -&gt;    Not Copied/Used
+</code></pre><p>As a rough overview to show in the grand scheme of things how this will look:</p>
+<ol>
+<li>The bootloader will first look for any boot-able data in SPI Flash, SPI Data Flash, and NAND Flash. In our case, we have the AT91 BootStrap in Dataflash at an offset of zero (start of Dataflash).</li>
+<li>The <a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap" target="_blank">AT91 BootStrap</a> will initialize DRAM and then copy data from DataFlash (in our case the Kernel at an offset of <code>0x7300</code>) into DRAM (at <code>0x2200_0000</code>), and the Device Tree from DataFlash at an offset of <code>0x4B00</code> to DRAM at <code>0x2100_0000</code>. </li>
+<li>Then the bootloader will initialize the environment for the Linux kernel and pass execution to the kernel. </li>
+<li>Since the kernel is a zImage (self extracting kernel image), the kernel will uncompress itself, execute itself, read the device tree which was copied to RAM earlier, initialize various drivers based on the device tree entries, and lastly pass execution to whatever is relevant in the root file system.</li>
+</ol>
+<h2 id="first-boot">First boot</h2>
+<p>First things first, let&apos;s get the board powered up with the dataflash erased. Upon bootup the bootloader in ROM of the SAM9N12 will configure basic clocking and the DBGU serial port on pins <code>R5</code> and <code>R6</code> to run at 115200 baud and output the text <code>RomBOOT</code>. If you see this then it means a lot went right, such as power integrity is alright, clocking is OK, the BGA package was soldered well, and of course no magic smoke means no shorts. Next we will look into getting DRAM working, compiling the AT91 BootStrap, flashing the Bootstrap to DataFlash, and getting it to boot.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../MX233/readme.html" class="navigation navigation-prev " aria-label="Previous page: MX233">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="SAMBA.html" class="navigation navigation-next " aria-label="Next page: SAM-BA">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"SAM9N12","level":"1.3","depth":1,"next":{"title":"SAM-BA","level":"1.3.1","depth":2,"path":"AT91SAM9N12/SAMBA.md","ref":"AT91SAM9N12/SAMBA.md","articles":[]},"previous":{"title":"MX233","level":"1.2","depth":1,"path":"MX233/readme.md","ref":"MX233/readme.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/readme.md","mtime":"2018-03-27T04:30:17.844Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-27T06:41:50.894Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

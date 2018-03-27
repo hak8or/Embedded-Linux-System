@@ -1,0 +1,360 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Old School · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="../AT91_Bootstrap.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../MX233/readme.html">
+            
+                <a href="../../MX233/readme.html">
+            
+                    
+                    MX233
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../readme.html">
+            
+                <a href="../readme.html">
+            
+                    
+                    SAM9N12
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../SAMBA.html">
+            
+                <a href="../SAMBA.html">
+            
+                    
+                    SAM-BA
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../AT91_Bootstrap.html">
+            
+                <a href="../AT91_Bootstrap.html">
+            
+                    
+                    AT91 Bootstrap
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.3" data-path="readme.html">
+            
+                <a href="readme.html">
+            
+                    
+                    Old School
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Old School</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h3 id="getting-started">Getting started</h3>
+<p>Right now, you have to manually find and download all the needed dependancies. A script will hopefully be written someday to automate downloading and patching all the files.</p>
+<p>Use the Atmel SAM9N12 <a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page" target="_blank">linux4sam</a> page for a general overview of the build process.</p>
+<h3 id="status">Status</h3>
+<p>A few years later this board was brought up again with the intention of using the most recent versions of mainline linux and new tools to help streamline the process. This can be read <a href="maineline/readme.md">here</a> How to set up the board using the old way via this readme has been kept because it shows how to set everything up by hand and therefore still presents useful information.</p>
+<p> Dataflash (like SPI NOR flash) is attached to the SPI bus from the chip to the SPI bus pads while also using it&apos;s own board. DRAM is also underclocked to 100 Mhz instead of 133 Mhz via the main system bus downclock, causing the processor to run at 300 Mhz instead of 400 Mhz. AT91 Bootstrap and U-Boot are located on dataflash at <code>0x00</code> and <code>0x8400</code> respectively, with U-Boot pulling the kernel from a flash drive connected via USB OTG as well. The kernel then pulls the rootfs off the flash drive in a dedicated ext2 rootfs as rw (read write). GCC has been cross compiled to this board and compiles programs correctly, so this board was used for completion of the project.</p>
+<h3 id="boot-process">Boot process</h3>
+<ul>
+<li>NVM bootloader: Primary bootloader which searches for executable code via Arm exception vectors on NAND and Dataflash and elsewhere except USB.</li>
+<li>AT91bootstrap: Secondary bootloader which setups up DRAM and puts the next executable code (again, via ARM exception vectors) into DRAM.</li>
+<li>U-Boot: Third bootloader for loading the linux kernel off USB and into memory while passing proper kernel boot arguments.</li>
+<li>Linux Kernel: Indended application, runs the rootfs off USB (not copied into memory).</li>
+</ul>
+<h3 id="overview">Overview</h3>
+<p>The <strong>NVM bootloader</strong> exists in ROM on the SAM9N12 and is the first thing executed upon powerup. This searches in for possible bootable storage mediums such as NAND, Dataflash, SPI, and others except USB, as well as sets up the serial port. If nothing was found then it starts up SAM-BA, which lets the SAM-BA client on a desktop to issue commands to the SAM9N12 over USB, this is used for writing both AT91 bootstrap and U-Boot to onboard dataflash.</p>
+<p>Next up is the <strong>AT91 bootloader</strong> which does pretty much the same as the NVM bootloader but also sets up DRAM. Keep in mind that even if DRAM seems to work via SAM-BA, it does NOT mean that it will work also via the at91 bootloader, memory timings were needed to be modified (relaxed) and clock lowered by 33 Mhz to get DRAM working. This sits in Dataflash at <code>0x00</code> which in this case is a 8 megabit chip. Some memory testing routines were added to this. Keep in mind that the endianess of this is NOT the same as most x86 systems, nibble swapping is done in the memory testing routines when printing.</p>
+<p><strong>U-Boot</strong> sits in dataflash at <code>0x8400</code> and sets up USB host, reads the DOS partition table for the first partition (FAT) loads <code>uiamge.bin</code> which is the kernel into memory at <code>0x00</code>, and lastly passes control to the kernel as well as passing boot arguments which are added via compile time. MDT-tools can be used for passing storage mediums information to the kernel but I didn&apos;t use it since it just sucks. Enviroment variables such as boot media can be supplied via a text file on USB but it seems we can&apos;t initialize USB before reading this file.</p>
+<p>The <strong>linux kernel</strong> does it&apos;s magic setting up cache and the MMU and all that jazz, and then loads the root filesystem from USB partition 2 as an ext2 filesystem but ext4 could be used if enabled in the kernel during compilation. The kernel then looks for <code>/bin/init</code> which baisically tells busybox to call <code>/etc/inittab</code> that tells the system what to do upon a restart/shutdown/ctrl-alt-del/respawn/sysinit. Sysinit tells to check <code>/etc/init.d/rcS</code> which handles telling the kernel to fill /proc and /sys. A small 5 megabyte ramfs is also made at this step as per <code>rcS</code>, afterwards the ash shell is started which is a very small alternative to bash while lacking some tools.</p>
+<h3 id="root-filesystem">Root filesystem.</h3>
+<p><strong>Busybox</strong> is a very awesome tool which lets you combine tools like ls, cat, mount, ln, etc into one executable for memory savings and simplicity. Busybox during <code>make install</code> makes an _install dir that holds the rootfs containing symbolic links to the single busybox executable, allowing calling these tools normally. The single executable can also just be copied into /bin without any symbolic links (assuming static compilation) with the tools called by doing <code>busybox tool</code>. Busybox can also handle an inittab for you, but it assumes that there are serial ports which aren&apos;t there, which spams the serial port every 250 milliseconds saying it didn&apos;t find them. Supplying an inittab without those serial port declerations fixes this.</p>
+<p>A small 5 megabyte <strong>ram file system</strong> is made via rcS but it isn&apos;t needed and is a remenant of when I used to mount the rootfs as read only. You can write to it using dd and whatnot to do rough memory tests or writing quickly changing data without wearing down flash.</p>
+<p><strong>GCC</strong> is included in the rootfs at <code>/usr/home/arm-none-linux-gnueabi/</code> which has been cross compiled to run on this board, as well as a hello world source file at <code>/usr/home/hello-world/</code>. Compiling the hello world takes a solid 5 or so seconds, a lot more if any sort of optimizations are enabled.</p>
+<p><strong>Libraries</strong> are also included in <code>/lib</code> which are required by busybox if busybox isn&apos;t statically compiled. GCC has it&apos;s own copy of these libraries in <code>/usr/home/arm-none-linux-gnueabi/arm-none-linux-gnueabi/rootfs/</code> which are used during static compilation by GCC as well as for the dynamic linker. Since gcc was not statically compiled, it also uses the libraries in /lib. The libraries to put in /lib should be copied from the gcc cross-compiler&apos;s <code>rootfs/lib/</code> folder.</p>
+<h3 id="toolchain">Toolchain</h3>
+<p><strong>Crosstools-NG</strong> was indespensable for handling all toolchain issues. While ARM do offer their version of GCC on Launchpad which includes pending additions to mainline GCC, it is preferrable to make a custom cross-compiler to select what standard c library to use. Crosstools-NG can properly compile a cross compiler as well as handling the chicken and egg problem with the c library and compiler, but it takes a solid 30 minutes to make a cross-compiler. Then, using a <a href="https://github.com/crosstool-ng/crosstool-ng/blob/master/docs/6%20-%20Toolchain%20types.txt" target="_blank">Canadian Build</a> (cross-native isn&apos;t currently supported), a cross-native compiler is compiled with the target tuple being the previously compiled cross-compiler, which takes roughly 45 minutes. In total, compiling a cross compiler and then a cross-native compiler using a normal build and then canadian build respectivly, takes roughly <em>an hour and fifteen minutes</em>.</p>
+<h3 id="resources-blob-from-onetab">Resources blob from OneTab</h3>
+<ul>
+<li><a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page#Linux_Kernel" target="_blank">LegacySAM9N12Page &lt; Linux4SAM &lt; TWiki</a></li>
+<li><a href="http://www.stlinux.com/?q=node/119/#RAMDiskBoot" target="_blank">Booting The Linux Kernel | STLinux</a></li>
+<li><a href="http://www.denx.de/wiki/view/DULG/UBootEnvVariables" target="_blank">UBootEnvVariables &lt; DULG &lt; DENX</a></li>
+<li><a href="http://www.stlinux.com/u-boot/kernel-booting" target="_blank">Booting The Linux Kernel | STLinux</a></li>
+<li><a href="http://blackfin.uclinux.org/doku.php?id=bootloaders:u-boot:usb" target="_blank">bootloaders:u-boot:usb Analog Devices Open Source | Mixed-signal and Digital Signal Processing ICs</a></li>
+<li><a href="http://www.linuxjournal.com/content/handy-u-boot-trick" target="_blank">A Handy U-Boot Trick | Linux Journal</a></li>
+<li><a href="http://kernelnewbies.org/KernelBuild" target="_blank">KernelBuild - Linux Kernel Newbies</a></li>
+<li><a href="https://github.com/Ttl/sam_board" target="_blank">Ttl/sam_board</a></li>
+<li><a href="https://github.com/Ttl/sam_board/blob/master/software/at91bootstrap/sam_board.patch" target="_blank">sam_board/sam_board.patch at master &#xB7; Ttl/sam_board</a></li>
+<li><a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/U-Boot" target="_blank">U-Boot &lt; Linux4SAM &lt; TWiki</a></li>
+<li><a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacyU-Boot#DataFlash" target="_blank">LegacyU-Boot &lt; Linux4SAM &lt; TWiki</a></li>
+<li><a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap#Boot_capabilities_matrix" target="_blank">AT91Bootstrap &lt; Linux4SAM &lt; TWiki</a></li>
+<li><a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacySAM9N12Page" target="_blank">LegacySAM9N12Page &lt; Linux4SAM &lt; TWiki</a></li>
+<li><a href="https://groups.google.com/forum/#!topic/acmesystems/NeXjxqVJZcU" target="_blank">Aria G25 256MB boot problem - Google Groups</a></li>
+<li><a href="https://gist.github.com/eepp/6056325" target="_blank">Building U-Boot and Linux 3.11 from scratch for the BeagleBone, and booting</a></li>
+<li><a href="http://parts.arrow.com/item/detail/micron-technology/mt46v32m16p-5bj#Qncy" target="_blank">MT46V32M16P-5B:J - Micron Technology, DRAM Chip. Order from Arrow Electronics.</a></li>
+<li><a href="https://sourcery.mentor.com/GNUToolchain/release2795?" target="_blank">Sourcery CodeBench Lite 2014.05-29 for ARM GNU/Linux</a></li>
+<li><a href="http://forums.gentoo.org/viewtopic-p-6384064.html?sid=8e84f81ab9bbf668c2eefb6b9a4266a0" target="_blank">Gentoo Forums :: View topic - VFS: Cannot open root device &quot;sda2&quot; or unknown-block(0,0) ..</a></li>
+<li><a href="http://pietrushnic.github.io/blog/2013/06/07/root-file-system-for-embedded-system/" target="_blank">0x6: Root file system for embedded system - Linux geek&apos;s scratchpad</a></li>
+<li><a href="http://git.busybox.net/busybox/tree/examples/inittab" target="_blank">busybox Inittab</a></li>
+<li><a href="http://www.busybox.net/downloads/BusyBox.html" target="_blank">BusyBox - The Swiss Army Knife of Embedded Linux</a></li>
+<li><a href="http://unix.stackexchange.com/questions/15895/how-do-i-check-busybox-version-from-busybox" target="_blank">How do I check busybox version (from busybox)? - Unix &amp; Linux Stack Exchange</a></li>
+<li><a href="http://stackoverflow.com/questions/22409516/how-to-compile-busybox" target="_blank">android - How to compile Busybox? - Stack Overflow</a></li>
+<li><a href="http://www.ibm.com/developerworks/library/l-busybox/" target="_blank">BusyBox simplifies embedded Linux systems</a></li>
+<li><a href="http://wiki.beyondlogic.org/index.php?title=Cross_Compiling_BusyBox_for_ARM" target="_blank">Cross Compiling BusyBox for ARM - BeyondLogic</a></li>
+<li><a href="http://www.eglibc.org/archives/patches/msg00078.html" target="_blank">Re: [patches] Cross-building instructions</a></li>
+<li><a href="http://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/" target="_blank">How to Build a GCC Cross-Compiler</a></li>
+<li><a href="http://llvm.org/docs/HowToCrossCompileLLVM.html" target="_blank">How To Cross-Compile Clang/LLVM using Clang/LLVM &#x2014; LLVM 3.7 documentation</a></li>
+<li><a href="https://mborgerson.com/cross-compiling-for-the-raspberry-pi/" target="_blank">Cross-Compiling for the Raspberry Pi</a></li>
+<li><a href="https://sourceware.org/ml/crossgcc/2012-11/msg00016.html" target="_blank">Bryan Hundven - Re: Cross compile native gcc for arm with crosstool-ng, have toolchain,</a></li>
+<li><a href="http://forum.xda-developers.com/showpost.php?p=18356849&amp;postcount=5" target="_blank">Linux in Android! DesirAPT is at Beta Test! - Post #5 - XDA Forums</a></li>
+<li><a href="http://crosstool-ng.org/" target="_blank">Crosstool-NG</a></li>
+<li><a href="https://github.com/crosstool-ng/crosstool-ng/blob/master/docs/1%20-%20Introduction.txt" target="_blank">crosstool-ng/1 - Introduction.txt at master &#xB7; crosstool-ng/crosstool-ng</a></li>
+<li><a href="http://www.dayid.org/os/notes/tm.html" target="_blank">dayid&apos;s screen and tmux cheat sheet</a></li>
+<li><a href="https://duckduckgo.com/?q=enable+multithreading+to+use+std%3A%3Athread%3A+operation+not+permitted+arm&amp;t=ffsb" target="_blank">enable multithreading to use std::thread: operation not permitted arm at DuckDuckGo</a></li>
+<li><a href="http://stackoverflow.com/questions/17274032/c-threads-stdsystem-error-operation-not-permitted" target="_blank">multithreading - C++ Threads, std::system_error - operation not permitted? - Stack Overflow</a></li>
+<li><a href="http://stackoverflow.com/questions/23494103/version-cxxabi-1-3-8-not-found-required-by" target="_blank">c++ - version `CXXABI_1.3.8&apos; not found (required by ...) - Stack Overflow</a></li>
+<li><a href="http://stackoverflow.com/questions/17785208/when-we-build-a-kernel-and-busy-box-we-need-toolchain-only-for-busybox-not-for" target="_blank">embedded linux - When we build a kernel and busy box, we need toolchain only for busybox not for kernel? - Stack Overflow</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../AT91_Bootstrap.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: AT91 Bootstrap">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Old School","level":"1.3.3","depth":2,"previous":{"title":"AT91 Bootstrap","level":"1.3.2","depth":2,"path":"AT91SAM9N12/AT91_Bootstrap.md","ref":"AT91SAM9N12/AT91_Bootstrap.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/OldSchool/readme.md","mtime":"2018-03-26T21:41:01.510Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-27T06:41:50.894Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

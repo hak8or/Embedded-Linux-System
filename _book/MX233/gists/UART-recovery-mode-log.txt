@@ -1,0 +1,189 @@
+pitc_loader(8002)
+
+loading pitc id 8002
+pitc installed
+initialize pitc 2864: id:8002
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 0
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 0
+register address: 0x8002c020
+lock bit: 0x0
+bank: 0x0
+word: 0x0
+locked: 0x0
+shadowed: 0x0
+pitc 8002: process_cdb(cdb:10)
+k_pitc_cmd_test_unit_ready
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 1
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 0
+PITC_INQUIRY_INFOPAGE__INFO
+
+PITC_INQUIRY - PITC ID 0x8002
+pitc 0x8002: uninstall pitc
+
+pitc_loader(8002)
+
+loading pitc id 8002
+pitc installed
+initialize pitc 2864: id:8002
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 24
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 24
+register address: 0x8002c1a0
+lock bit: 0x18
+bank: 0x3
+word: 0x0
+locked: 0x0
+shadowed: 0x0
+pitc 8002: process_cdb(cdb:14)
+k_pitc_cmd_write_otp_register
+pitc_wait_for_data_out: call to state
+pitc_wait_for_data_out: call to state success
+data-in stage complete
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 16
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 16
+register address: 0x8002c120
+lock bit: 0x0
+bank: 0x2
+word: 0x0
+locked: 0x0
+shadowed: 0x1
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 24
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 24
+register address: 0x8002c1a0
+lock bit: 0x18
+bank: 0x3
+word: 0x0
+locked: 0x0
+shadowed: 0x0
+pitc 8002: process_cdb(cdb:10)
+k_pitc_cmd_test_unit_ready
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 1
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 0
+PITC_INQUIRY_INFOPAGE__INFO
+
+PITC_INQUIRY - PITC ID 0x8002
+pitc 0x8002: uninstall pitc
+
+pitc_loader(8002)
+
+loading pitc id 8002
+pitc installed
+initialize pitc 2864: id:8002
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 25
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 25
+register address: 0x8002c1b0
+lock bit: 0x19
+bank: 0x3
+word: 0x1
+locked: 0x0
+shadowed: 0x0
+pitc 8002: process_cdb(cdb:13)
+k_pitc_cmd_read_otp_register
+
+u32TotalBytesToSend: 4
+pitc_wait_for_data_in: call to state success
+data-out stage complete
+pitc 8002: process_cdb(cdb:12)
+k_pitc_cmd_inquiry
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 24
+PITC_INQUIRY_INFOPAGE__INFO u8Opcode: 18
+PITC_INQUIRY_INFOPAGE__INFO u8InfoPage: 3
+PITC_INQUIRY_INFOPAGE__INFO u32InfoParam: 24
+register address: 0x8002c1a0
+lock bit: 0x18
+bank: 0x3
+word: 0x0
+locked: 0x0
+shadowed: 0x0
+▒▒▒▒▒   !@▒f▒▒▒▒▒▒▒`▒▒▒

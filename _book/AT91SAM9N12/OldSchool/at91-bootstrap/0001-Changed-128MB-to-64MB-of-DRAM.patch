@@ -1,0 +1,23 @@
+From 7f54d50161dbdf8d9d5d6cdb94ed9da379c63836 Mon Sep 17 00:00:00 2001
+From: hak8or <hak8or@gmail.com>
+Date: Fri, 27 Mar 2015 02:04:32 -0400
+Subject: [PATCH 1/5] Changed 128MB to 64MB of DRAM.
+
+---
+ board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig b/board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig
+index 5a0a14e..79fdf40 100644
+--- a/board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig
++++ b/board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_AT91SAM9N12EK=y
+-CONFIG_RAM_128MB=y
++CONFIG_RAM_64MB=y
+ CONFIG_DEBUG=y
+ CONFIG_THUMB=y
+ CONFIG_SCLK=y
+-- 
+2.1.0
+

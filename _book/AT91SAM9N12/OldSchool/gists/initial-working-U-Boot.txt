@@ -1,0 +1,198 @@
+Contents at 0x2005d8ec : 0xffffffff
+Contents at 0x2005d8f0 : 0xffffffff
+Contents at 0x2005d8f4 : 0xffffffff
+Contents at 0x2005d8f8 : 0xffffffff
+Contents at 0x2005d8fc : 0xffffffff
+Jumping to JUMP_ADDR (0x20008400) ...
+ 
+ 
+U-Boot 2014.07-00058-gb44bde2-dirty (Mar 15 2015 - 01:53:35)
+ 
+CPU: AT91SAM9N12
+Crystal frequency: 16 MHz
+CPU clock : 301.333 MHz
+Master clock : 100.444 MHz
+DRAM: 64 MiB
+WARNING: Caches not enabled
+NAND: atmel_nand: Fail to initialize #0 chip0 MiB
+MMC: mci: 0
+SF: Detected AT45DB081D with page size 256 Bytes, erase size 4 KiB, tot al 1 MiB
+*** Warning - bad CRC, using default environment
+ 
+In: serial
+Out: serial
+Err: serial
+Net: ks8851_mll: Invalid chip id 0x30c0
+Board Net Initialization Failed
+No ethernet found.
+Hit any key to stop autoboot: 0
+SF: Detected AT45DB081D with page size 256 Bytes, erase size 4 KiB, tot al 1 MiB
+ERROR: attempting read past flash size (0x100000)
+Wrong Image Format for bootm command
+ERROR: can't get kernel image!
+U-Boot>ls
+Unknown command 'ls' - try 'help'
+U-Boot> base
+Base Address: 0x00000000
+U-Boot> md 0 c
+00000000: ea00000e ea000005 ea000005 ea000005 ................
+00000010: ea000005 00001ed0 ea000006 ea000006 ................
+00000020: eafffffe eafffffe eafffffe e25ef004 ..............^.
+U-Boot> help mtest
+Unknown command 'mtest' - try 'help' without arguments for list of all known commands
+ 
+U-Boot> help
+? - alias for 'help'
+base - print or set address offset
+bdinfo - print Board Info structure
+boot - boot default, i.e., run 'bootcmd'
+bootd - boot default, i.e., run 'bootcmd'
+bootm - boot application image from memory
+bootp - boot image via network using BOOTP/TFTP protocol
+bootz - boot Linux zImage image from memory
+chpart - change active partition
+cls - clear screen
+cmp - memory compare
+coninfo - print console devices and information
+cp - memory copy
+crc32 - checksum calculation
+dhcp - boot image via network using DHCP/TFTP protocol
+echo - echo args to console
+editenv - edit environment variable
+env - environment handling commands
+exit - exit script
+false - do nothing, unsuccessfully
+fatinfo - print information about filesystem
+fatload - load binary file from a dos filesystem
+fatls - list files in a directory (default /)
+fdt - flattened device tree utility commands
+go - start application at address 'addr'
+help - print command description/usage
+iminfo - print header information for application image
+imxtract- extract a part of a multi-image
+itest - return true/false on integer compare
+loadb - load binary file over serial line (kermit mode)
+loads - load S-Record file over serial line
+loadx - load binary file over serial line (xmodem mode)
+loady - load binary file over serial line (ymodem mode)
+loop - infinite loop on address range
+md - memory display
+mm - memory modify (auto-incrementing address)
+mmc - MMC sub system
+mmcinfo - display MMC info
+mtdparts- define flash/nand partitions
+mw - memory write (fill)
+nand - NAND sub-system
+nboot - boot from NAND device
+nfs - boot image via network using NFS protocol
+nm - memory modify (constant address)
+ping - send ICMP ECHO_REQUEST to network host
+printenv- print environment variables
+reset - Perform RESET of the CPU
+run - run commands in an environment variable
+saveenv - save environment variables to persistent storage
+setenv - set environment variables
+sf - SPI flash sub-system
+showvar - print local hushshell variables
+sleep - delay execution for some time
+source - run script from memory
+test - minimal test like /bin/sh
+tftpboot- boot image via network using TFTP protocol
+true - do nothing, successfully
+usb - USB sub-system
+usbboot - boot from USB device
+version - print monitor, compiler and linker version
+U-Boot> sf
+sf - SPI flash sub-system
+ 
+Usage:
+sf probe [[bus:]cs] [hz] [mode] - init flash device on given SPI bus
+and chip select
+sf read addr offset len - read `len' bytes starting at
+`offset' to memory at `addr'
+sf write addr offset len - write `len' bytes from memory
+at `addr' to flash at `offset'
+sf erase offset [+]len - erase `len' bytes from `offset'
+`+len' round up `len' to block size
+sf update addr offset len - erase and write `len' bytes from memory
+at `addr' to flash at `offset'
+U-Boot> test
+U-Boot> md 0 c
+00000000: ea00000e ea000005 ea000005 ea000005 ................
+00000010: ea000005 00001ed0 ea000006 ea000006 ................
+00000020: eafffffe eafffffe eafffffe e25ef004 ..............^.
+U-Boot> md 0
+00000000: ea00000e ea000005 ea000005 ea000005 ................
+00000010: ea000005 00001ed0 ea000006 ea000006 ................
+00000020: eafffffe eafffffe eafffffe e25ef004 ..............^.
+U-Boot> help md
+md - memory display
+ 
+Usage:
+md [.b, .w, .l] address [# of objects]
+U-Boot> md 0 20
+00000000: ea00000e ea000005 ea000005 ea000005 ................
+00000010: ea000005 00001ed0 ea000006 ea000006 ................
+00000020: eafffffe eafffffe eafffffe e25ef004 ..............^.
+00000030: e1a00000 eafffffe eafffffe eafffffe ................
+00000040: e3a0d9c2 e59f40c4 e1a0e00f e12fff14 .....@......../.
+00000050: e59f20bc e892001a e1530004 34912004 . ........S.. .4
+00000060: 34832004 3afffffb e28f2098 e8920018 . .4...:. ......
+00000070: e3a02000 e1530004 34832004 3afffffc . ....S.. .4...:
+U-Boot> version
+ 
+U-Boot 2014.07-00058-gb44bde2-dirty (Mar 15 2015 - 01:53:35)
+arm-none-eabi-gcc (GNU Tools for ARM Embedded Processors) 4.9.3 20141119 (release) [ARM/embedded-4_9-branch revision 218278]
+GNU ld (GNU Tools for ARM Embedded Processors) 2.24.0.20141128
+U-Boot> usb
+usb - USB sub-system
+ 
+Usage:
+usb start - start (scan) USB controller
+usb reset - reset (rescan) USB controller
+usb stop [f] - stop USB [f]=force stop
+usb tree - show USB device tree
+usb info [dev] - show available USB devices
+usb test [dev] [port] [mode] - set USB 2.0 test mode
+(specify port 0 to indicate the device's upstream port)
+Available modes: J, K, S[E0_NAK], P[acket], F[orce_Enable]
+usb storage - show details of USB storage devices
+usb dev [dev] - show or set current USB storage device
+usb part [dev] - print partition table of one or all USB storage devices
+usb read addr blk# cnt - read `cnt' blocks starting at block `blk#'
+to memory address `addr'
+usb write addr blk# cnt - write `cnt' blocks starting at block `blk#'
+from memory address `addr'
+U-Boot> usb info
+USB is stopped. Please issue 'usb start' first.
+U-Boot> usb start
+(Re)start USB...
+USB0: scanning bus 0 for devices... 1 USB Device(s) found
+scanning usb for storage devices... 0 Storage Device(s) found
+U-Boot> usb info
+1: Hub, USB Revision 1.10
+- U-Boot Root Hub
+- Class: Hub
+- PacketSize: 8 Configurations: 1
+- Vendor: 0x0000 Product 0x0000 Version 0.0
+Configuration: 1
+- Interfaces: 1 Self Powered 0mA
+Interface: 0
+- Alternate Setting 0, Endpoints: 1
+- Class Hub
+- Endpoint 1 In Interrupt MaxPacket 2 Interval 255ms
+ 
+U-Boot> usb tree
+USB device tree:
+1 Hub (12 Mb/s, 0mA)
+U-Boot Root Hub
+ 
+U-Boot> coninfo
+List of available devices:
+lcd 00000002 ..O
+serial 80000003 SIO stdin stdout stderr
+atmel_serial 00000003 .IO
+U-Boot> chpart
+Device nand0 not found!
+U-Boot>
+

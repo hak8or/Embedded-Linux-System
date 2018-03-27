@@ -1,0 +1,36 @@
+From f95b39a4876b10ce5576c0b60bbf04dcae53f428 Mon Sep 17 00:00:00 2001
+From: hak8or <hak8or@gmail.com>
+Date: Fri, 27 Mar 2015 02:14:27 -0400
+Subject: [PATCH 2/5] Dropped DRAM + MCLK from 133 Mhz to 100 Mhz
+
+---
+ board/at91sam9n12ek/at91sam9n12ek.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/at91sam9n12ek/at91sam9n12ek.h b/board/at91sam9n12ek/at91sam9n12ek.h
+index e39a820..dece3b5 100644
+--- a/board/at91sam9n12ek/at91sam9n12ek.h
++++ b/board/at91sam9n12ek/at91sam9n12ek.h
+@@ -35,16 +35,16 @@
+  * and MCK is switched on the main oscillator.                                  
+  * PLL initialization is done later in the hw_init() function
+  */
+-#define MASTER_CLOCK		(132096000)
++#define MASTER_CLOCK		(100000000)
+ #define PLL_LOCK_TIMEOUT	10000
+ 
+ #define BOARD_MAINOSC		16000000
+-#define BOARD_MCK		133000000
++#define BOARD_MCK		    100000000
+ #define BOARD_OSCOUNT		(AT91C_CKGR_OSCOUNT & (64 << 8))
+ #define BOARD_CKGR_PLLA		(AT91C_CKGR_SRCA | AT91C_CKGR_OUTA_0)
+ #define BOARD_PLLACOUNT		(0x3F << 8)
+ //#define BOARD_MULA		(AT91C_CKGR_MULA & (199 << 16))
+-#define BOARD_MULA		(AT91C_CKGR_MULA & (149 << 16))
++#define BOARD_MULA		(AT91C_CKGR_MULA & (112 << 16))
+ #define BOARD_DIVA		(AT91C_CKGR_DIVA & 3)
+ 
+ #define BOARD_PRESCALER_MAIN_CLOCK	(AT91C_PMC_PLLADIV2_2 \
+-- 
+2.1.0
+
