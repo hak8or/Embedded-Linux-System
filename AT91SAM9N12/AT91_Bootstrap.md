@@ -1,11 +1,12 @@
 # AT91 Bootstrap
-In addition to SAM-BA, Atmel released AT91 Bootstrap, a secondary bootloader which handles clocking, DRAM initialization, and can even boot the Linux kernel directly without the need for U-Boot. They also made some good [Documentation](http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap) on it, though I do find the code itself to be fairly messy and poorly documented. Heck, it's even written in C89 style where all the variables are at the top of functions, in addition to doing ```for(i = 0; i < 100; i++)``` instead of ```for(int i = 0; i < 100; i++)```.
 
-Our first goal is to just get the bootstrap to both compile and run on the board.
+In addition to SAM-BA, Atmel released AT91 Bootstrap, a secondary bootloader which handles clocking, DRAM initialization, and can even boot the Linux kernel directly without the need for U-Boot. They also made some good [documentation](http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap) on it, though I found the code itself to be fairly messy and poorly documented. Heck, it's even written in C89 style where all the variables are at the top of functions and using ```for(i = 0; i < 100; i++)``` instead of style ```for(int i = 0; i < 100; i++)``` for loops.
+
+Our first goal is to just get bootstrap both compiling and running on the board, after which comes the Linux kernel and busybox.
 
 ## Configuring
 
-To download the source code of AT91 Bootstrap and configure it, do the following:
+To download the source code of AT91 Bootstrap and configure it, just do a git clone;
 
 ```bash
 # Clone the git repo of AT91 Bootstrap
@@ -15,7 +16,7 @@ git clone https://github.com/linux4sam/at91bootstrap.git
 cd at91bootstrap
 ```
 
-This software by Atmel, and almost all other larger codebases that run on bare metal using kconfig to configure itself (works with define's in C/C++ code and other various configuration). In here you can configure things like the if to enable direct linux kernel booting, where in dataflash the kernel and device tree is stored, where to copy them to in DRAM, and more.
+This software by Atmel, and almost all other larger codebases that run on bare metal, use kconfig to configure itself (works with define's in C/C++ code and other various configuration). In here you can configure things like enabling the ability to direct boot the Linux kernel, where in dataflash the kernel and device tree is stored, where to copy them to in DRAM, and more.
 
 To start off, we need to get the default configuration (defconfig) that represents our board. Since our board is based on the SAM9N12EK board from Atmel, we have to find the name of that defconfig. In the root of the repository we can do the following:
 
@@ -32,17 +33,35 @@ To start off, we need to get the default configuration (defconfig) that represen
 ./board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig
 ```
 
-The plan is to boot linux directly (so no uboot) and from dataflash instead of nandflash (so df instead of nf). We will also be using a device tree (more on that later), in which case we also want the "dt" acronym. What's left is ```at91sam9n12ekdf_linux_image_dt_defconfig``` so running ```make at91sam9n12ekdf_linux_image_dt_defconfig``` will create a config file in the root of the git repo that is just a copy of that ```defconfig``` file which ```make menuconfig``` will modify. Since we just want the bootstrap to compile and run for now, we only need to make once change via ```menuconfig```; in ```slow clock configuration options```, uncheck ```Use External 32KHZ oscillator``` because this board does not have that component populated.
+The plan is to boot linux directly (so no uboot) and from dataflash instead of nandflash (so ```df``` instead of ```nf```). We will also be using a device tree (more on that later), in which case we also want the ```dt``` acronym. What's left is ```at91sam9n12ekdf_linux_image_dt_defconfig``` so running ```make at91sam9n12ekdf_linux_image_dt_defconfig``` will create a config file in the root of the git repo that is just a copy of that ```defconfig``` file which ```make menuconfig``` will modify. Since we just want the bootstrap to compile and run for now, we only need to make two changes via ```menuconfig```. First is in ```slow clock configuration options``` where you should uncheck ```Use External 32KHZ oscillator``` because this board does not have that component populated.
 
-### Toolchain
-This is where many run into issues, how to handle the toolchain. The way this guide is set up creates a fairly painless process on how to handle the toolchains for this project. This is also all done in an Arch Linux based distro for simplicities sake (Ubuntu PPA's tend to be so old that you have to manually add a PPA, Arch uses AUR which has a huge amount of packages which are fully up to date). There are two types of compilers we will use, ```arm-none-***```
-and ```arm-linux-***```, the first of which being used for AT91 Bootstrap and SAM-BA applets and the second of which being for the linux Kernel and cross compiling binaries running on the board under linux.
+Secondly is the DRAM configuration. The DRAM used in the evaluation kit is the ```MT47H64M16HR-3``` while we use the ```W9751G6KB-25```. Their IC has eight banks while ours has only 4, with the remaining timing paremeters being usable, so all we need to change is the following;
+
+```c
+[hak8or@hak8or at91bootstrap]$ git diff board/at91sam9n12ek/at91sam9n12ek.c
+diff --git a/board/at91sam9n12ek/at91sam9n12ek.c b/board/at91sam9n12ek/at91sam9n12ek.c
+index fee32d5..369dab8 100644
+--- a/board/at91sam9n12ek/at91sam9n12ek.c
++++ b/board/at91sam9n12ek/at91sam9n12ek.c
+@@ -74,7 +74,7 @@ static void ddramc_reg_config(struct ddramc_register *ddramc_config)
+        ddramc_config->cr = (AT91C_DDRC2_NC_DDR10_SDR9  // 10 column bits (1K)
+                                | AT91C_DDRC2_NR_13     // 13 row bits    (8K)
+                                | AT91C_DDRC2_CAS_3     // CAS Latency 3
+-                               | AT91C_DDRC2_NB_BANKS_8        // 8 banks
++                               | AT91C_DDRC2_NB_BANKS_4        // 4 banks
+                                | AT91C_DDRC2_DISABLE_RESET_DLL
+                                | AT91C_DDRC2_DECOD_INTERLEAVED);
+```
+
+## Toolchain
+
+This is where many run into issues, how to handle the toolchain. The way this guide is set up uses a fairly painless process on how to handle the toolchains for this project. This is also all done in an Arch Linux based distro for simplicities sake (Ubuntu PPA's tend to be so old that you have to manually add a PPA, Arch uses AUR which has a huge amount of packages which are actually up to date since it's a rolling release). There are two types of compilers we will use, ```arm-none-***```
+and ```arm-linux-***```, the first of which being used for AT91 Bootstrap and SAM-BA applets while the second is for the Linux Kernel and cross compiling binaries running on the board under linux.
 
 In Arch, simply doing ```pacman -S arm-none-eabi-gcc``` will get you the newest (```7.3.0``` as of writing) toolchain, but under Ubuntu it seems doing ```apt get install arm-none-eabi-gcc``` should also suffice. For ```arm-linux***``` buildroot will be used (it fetches the toolchain and compiles everything for you, crazy stuff).
 
 ## Compiling
 Now that we have a compiler, we should be able to just run ```make CROSS_COMPILE=arm-none-eabi-``` successfully.
-
 
 ```bash
 [hak8or@hak8or at91bootstrap_fiddle]$ make CROSS_COMPILE=arm-none-eabi-
@@ -97,7 +116,7 @@ We need to copy the resulting ```boot.bin``` (which is a symlink to ```t91sam9n1
 
 And when we restart the board then on the serial port we should be seeing the following;
 
-```
+```none
 RomBOOT
 
 
@@ -109,4 +128,4 @@ SF: Press the recovery button (PB4) to recovery
 SF: Failed to load image
 ```
 
-Looks like we have AT91 Bootstrap compiling, running, and interpreting the Dataflash IC correctly! Next up, we will compiling the Linux kernel and getting a new toolchain with buildroot.
+Looks like we have AT91 Bootstrap compiling, running, and interpreting the Dataflash IC correctly! Next up, is getting a new toolchain with buildroot and compiling the Linux kernel.

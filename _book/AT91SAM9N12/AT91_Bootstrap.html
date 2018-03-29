@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="OldSchool/readme.html" />
+    <link rel="next" href="devicetree.html" />
     
     
     <link rel="prev" href="SAMBA.html" />
@@ -155,7 +155,46 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.3" data-path="OldSchool/readme.html">
+        <li class="chapter " data-level="1.3.3" data-path="devicetree.html">
+            
+                <a href="devicetree.html">
+            
+                    
+                    Device Tree
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="buildroot.html">
+            
+                <a href="buildroot.html">
+            
+                    
+                    Buildroot
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="linux.html">
+            
+                <a href="linux.html">
+            
+                    
+                    Linux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="OldSchool/readme.html">
             
                 <a href="OldSchool/readme.html">
             
@@ -219,17 +258,17 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="at91-bootstrap">AT91 Bootstrap</h1>
-<p>In addition to SAM-BA, Atmel released AT91 Bootstrap, a secondary bootloader which handles clocking, DRAM initialization, and can even boot the Linux kernel directly without the need for U-Boot. They also made some good <a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap" target="_blank">Documentation</a> on it, though I do find the code itself to be fairly messy and poorly documented. Heck, it&apos;s even written in C89 style where all the variables are at the top of functions, in addition to doing <code>for(i = 0; i &lt; 100; i++)</code> instead of <code>for(int i = 0; i &lt; 100; i++)</code>.</p>
-<p>Our first goal is to just get the bootstrap to both compile and run on the board.</p>
+<p>In addition to SAM-BA, Atmel released AT91 Bootstrap, a secondary bootloader which handles clocking, DRAM initialization, and can even boot the Linux kernel directly without the need for U-Boot. They also made some good <a href="http://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap" target="_blank">documentation</a> on it, though I found the code itself to be fairly messy and poorly documented. Heck, it&apos;s even written in C89 style where all the variables are at the top of functions and using <code>for(i = 0; i &lt; 100; i++)</code> instead of style <code>for(int i = 0; i &lt; 100; i++)</code> for loops.</p>
+<p>Our first goal is to just get bootstrap both compiling and running on the board, after which comes the Linux kernel and busybox.</p>
 <h2 id="configuring">Configuring</h2>
-<p>To download the source code of AT91 Bootstrap and configure it, do the following:</p>
+<p>To download the source code of AT91 Bootstrap and configure it, just do a git clone;</p>
 <pre><code class="lang-bash"><span class="hljs-comment"># Clone the git repo of AT91 Bootstrap</span>
 git <span class="hljs-built_in">clone</span> https://github.com/linux4sam/at91bootstrap.git
 
 <span class="hljs-comment"># Enter the directory of the git repo</span>
 <span class="hljs-built_in">cd</span> at91bootstrap
 </code></pre>
-<p>This software by Atmel, and almost all other larger codebases that run on bare metal using kconfig to configure itself (works with define&apos;s in C/C++ code and other various configuration). In here you can configure things like the if to enable direct linux kernel booting, where in dataflash the kernel and device tree is stored, where to copy them to in DRAM, and more.</p>
+<p>This software by Atmel, and almost all other larger codebases that run on bare metal, use kconfig to configure itself (works with define&apos;s in C/C++ code and other various configuration). In here you can configure things like enabling the ability to direct boot the Linux kernel, where in dataflash the kernel and device tree is stored, where to copy them to in DRAM, and more.</p>
 <p>To start off, we need to get the default configuration (defconfig) that represents our board. Since our board is based on the SAM9N12EK board from Atmel, we have to find the name of that defconfig. In the root of the repository we can do the following:</p>
 <pre><code class="lang-bash">[hak8or@hak8or at91bootstrap_fiddle]$ find . -name <span class="hljs-string">&quot;*sam9n12*defconfig&quot;</span>
 ./board/at91sam9n12ek/at91sam9n12eksd_linux_image_dt_defconfig
@@ -242,10 +281,25 @@ git <span class="hljs-built_in">clone</span> https://github.com/linux4sam/at91bo
 ./board/at91sam9n12ek/at91sam9n12eknf_linux_image_dt_defconfig
 ./board/at91sam9n12ek/at91sam9n12ekdf_uboot_defconfig
 </code></pre>
-<p>The plan is to boot linux directly (so no uboot) and from dataflash instead of nandflash (so df instead of nf). We will also be using a device tree (more on that later), in which case we also want the &quot;dt&quot; acronym. What&apos;s left is <code>at91sam9n12ekdf_linux_image_dt_defconfig</code> so running <code>make at91sam9n12ekdf_linux_image_dt_defconfig</code> will create a config file in the root of the git repo that is just a copy of that <code>defconfig</code> file which <code>make menuconfig</code> will modify. Since we just want the bootstrap to compile and run for now, we only need to make once change via <code>menuconfig</code>; in <code>slow clock configuration options</code>, uncheck <code>Use External 32KHZ oscillator</code> because this board does not have that component populated.</p>
-<h3 id="toolchain">Toolchain</h3>
-<p>This is where many run into issues, how to handle the toolchain. The way this guide is set up creates a fairly painless process on how to handle the toolchains for this project. This is also all done in an Arch Linux based distro for simplicities sake (Ubuntu PPA&apos;s tend to be so old that you have to manually add a PPA, Arch uses AUR which has a huge amount of packages which are fully up to date). There are two types of compilers we will use, <code>arm-none-***</code>
-and <code>arm-linux-***</code>, the first of which being used for AT91 Bootstrap and SAM-BA applets and the second of which being for the linux Kernel and cross compiling binaries running on the board under linux.</p>
+<p>The plan is to boot linux directly (so no uboot) and from dataflash instead of nandflash (so <code>df</code> instead of <code>nf</code>). We will also be using a device tree (more on that later), in which case we also want the <code>dt</code> acronym. What&apos;s left is <code>at91sam9n12ekdf_linux_image_dt_defconfig</code> so running <code>make at91sam9n12ekdf_linux_image_dt_defconfig</code> will create a config file in the root of the git repo that is just a copy of that <code>defconfig</code> file which <code>make menuconfig</code> will modify. Since we just want the bootstrap to compile and run for now, we only need to make two changes via <code>menuconfig</code>. First is in <code>slow clock configuration options</code> where you should uncheck <code>Use External 32KHZ oscillator</code> because this board does not have that component populated.</p>
+<p>Secondly is the DRAM configuration. The DRAM used in the evaluation kit is the <code>MT47H64M16HR-3</code> while we use the <code>W9751G6KB-25</code>. Their IC has eight banks while ours has only 4, with the remaining timing paremeters being usable, so all we need to change is the following;</p>
+<pre><code class="lang-c">[hak8or@hak8or at91bootstrap]$ git diff board/at91sam9n12ek/at91sam9n12ek.c
+diff --git a/board/at91sam9n12ek/at91sam9n12ek.c b/board/at91sam9n12ek/at91sam9n12ek.c
+index fee32d5..369dab8 100644
+--- a/board/at91sam9n12ek/at91sam9n12ek.c
++++ b/board/at91sam9n12ek/at91sam9n12ek.c
+@@ -74,7 +74,7 @@ static void ddramc_reg_config(struct ddramc_register *ddramc_config)
+        ddramc_config-&gt;cr = (AT91C_DDRC2_NC_DDR10_SDR9  // 10 column bits (1K)
+                                | AT91C_DDRC2_NR_13     // 13 row bits    (8K)
+                                | AT91C_DDRC2_CAS_3     // CAS Latency 3
+-                               | AT91C_DDRC2_NB_BANKS_8        // 8 banks
++                               | AT91C_DDRC2_NB_BANKS_4        // 4 banks
+                                | AT91C_DDRC2_DISABLE_RESET_DLL
+                                | AT91C_DDRC2_DECOD_INTERLEAVED);
+</code></pre>
+<h2 id="toolchain">Toolchain</h2>
+<p>This is where many run into issues, how to handle the toolchain. The way this guide is set up uses a fairly painless process on how to handle the toolchains for this project. This is also all done in an Arch Linux based distro for simplicities sake (Ubuntu PPA&apos;s tend to be so old that you have to manually add a PPA, Arch uses AUR which has a huge amount of packages which are actually up to date since it&apos;s a rolling release). There are two types of compilers we will use, <code>arm-none-***</code>
+and <code>arm-linux-***</code>, the first of which being used for AT91 Bootstrap and SAM-BA applets while the second is for the Linux Kernel and cross compiling binaries running on the board under linux.</p>
 <p>In Arch, simply doing <code>pacman -S arm-none-eabi-gcc</code> will get you the newest (<code>7.3.0</code> as of writing) toolchain, but under Ubuntu it seems doing <code>apt get install arm-none-eabi-gcc</code> should also suffice. For <code>arm-linux***</code> buildroot will be used (it fetches the toolchain and compiles everything for you, crazy stuff).</p>
 <h2 id="compiling">Compiling</h2>
 <p>Now that we have a compiler, we should be able to just run <code>make CROSS_COMPILE=arm-none-eabi-</code> successfully.</p>
@@ -296,7 +350,7 @@ Size of at91sam9n12ek-dataflashboot-linux--dt-3.8.10-rc1.bin is 8336 bytes
 <p>We need to copy the resulting <code>boot.bin</code> (which is a symlink to <code>t91sam9n12ek-dataflashboot-linux--dt-3.8.10-rc1.bin</code>) to dataflash. Do <strong>not</strong> use just &quot;copy file&quot; because the ROM bootloader needs some extra information. Using the &quot;Save Boot File&quot; applet in SAM-BA will generate and save this extra information.</p>
 <p><img src="images/AT91Bootstrap_Flash.PNG" alt="AT91 Bootstrap Output"></p>
 <p>And when we restart the board then on the serial port we should be seeing the following;</p>
-<pre><code>RomBOOT
+<pre><code class="lang-none">RomBOOT
 
 
 
@@ -305,7 +359,8 @@ AT91Bootstrap 3.8.10-rc1-dirty (Tue Mar 27 02:26:14 EDT 2018)
 SF: Got Manufacturer and Device ID: 0x1f 0x27 0x1 0x1 0x0
 SF: Press the recovery button (PB4) to recovery
 SF: Failed to load image
-</code></pre><p>Looks like we have AT91 Bootstrap compiling, running, and interpreting the Dataflash IC correctly! Next up, we will compiling the Linux kernel and getting a new toolchain with buildroot.</p>
+</code></pre>
+<p>Looks like we have AT91 Bootstrap compiling, running, and interpreting the Dataflash IC correctly! Next up, is getting a new toolchain with buildroot and compiling the Linux kernel.</p>
 
                                 
                                 </section>
@@ -338,7 +393,7 @@ SF: Failed to load image
                 </a>
                 
                 
-                <a href="OldSchool/readme.html" class="navigation navigation-next " aria-label="Next page: Old School">
+                <a href="devicetree.html" class="navigation navigation-next " aria-label="Next page: Device Tree">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -349,7 +404,7 @@ SF: Failed to load image
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"AT91 Bootstrap","level":"1.3.2","depth":2,"next":{"title":"Old School","level":"1.3.3","depth":2,"path":"AT91SAM9N12/OldSchool/readme.md","ref":"AT91SAM9N12/OldSchool/readme.md","articles":[]},"previous":{"title":"SAM-BA","level":"1.3.1","depth":2,"path":"AT91SAM9N12/SAMBA.md","ref":"AT91SAM9N12/SAMBA.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/AT91_Bootstrap.md","mtime":"2018-03-27T06:34:57.953Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-27T06:41:50.894Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"AT91 Bootstrap","level":"1.3.2","depth":2,"next":{"title":"Device Tree","level":"1.3.3","depth":2,"path":"AT91SAM9N12/devicetree.md","ref":"AT91SAM9N12/devicetree.md","articles":[]},"previous":{"title":"SAM-BA","level":"1.3.1","depth":2,"path":"AT91SAM9N12/SAMBA.md","ref":"AT91SAM9N12/SAMBA.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/AT91_Bootstrap.md","mtime":"2018-03-29T06:52:41.877Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-29T09:00:32.734Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
