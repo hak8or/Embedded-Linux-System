@@ -128,4 +128,4 @@ SF: Press the recovery button (PB4) to recovery
 SF: Failed to load image
 ```
 
-Looks like we have AT91 Bootstrap compiling, running, and interpreting the Dataflash IC correctly! Next up, is getting a new toolchain with buildroot and compiling the Linux kernel.
+Looks like we have AT91 Bootstrap compiling, running, and interpreting the Dataflash IC correctly! [Next](devicetree.md) up is working with device tree.

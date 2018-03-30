@@ -92,3 +92,105 @@ A ```.dts``` file is meant to say what peripherals are present and used in on a 
 The driver advertises itself as compatible [here](https://github.com/torvalds/linux/blob/0b412605ef5f5c64b31f19e2910b1d5eba9929c3/drivers/spi/spi-atmel.c#L1820) and pulls in which pins to use as chip select from the Device Tree [here](https://github.com/torvalds/linux/blob/0b412605ef5f5c64b31f19e2910b1d5eba9929c3/drivers/spi/spi-atmel.c#L1492).
 
 Lastly, the device tree is not stored as just a big text file on the device. It's compiled using ```dtc``` into a single ```.dtb``` (device tree binary) file. When the kernel is booting, the address of this file is provided in one of the CPU registers. As time went on, the community has done an amazing job porting much of the old code into a device tree complaint format, as shown [here](https://lwn.net/Articles/572692/) in another probably better writeup. The key take away from this is that a device tree is just a way of describing to the kernel what hardware is present, where in the address map it is, what driver to use for interacting with it, and various optional parameters.
+
+## Custom Device Tree
+
+Time to make our own device tree. We know we want the following;
+
+- Serial port for Dataflash (root file system is not copied to RAM)
+- Dataflash IC itself on SPI0 peripheral
+- Partition the Dataflash for all our data
+- USB Host (it's only 4 lines, will use this for a Wifi dongle)
+
+At the top level we have a memory node to tell the kernel where memory is and how much of it the Kerenl is allowed to use, what clock sources there are, and then peripherals mapped onto various busses. In ARM there are a few busses as per spec, in our case the USB peripheral is directly on the AHB bus. From the AHB bus branches off a slower APB bus to which the SPI peripheral is attached to. The SPI bus has only one device, an ```AT45``` based Dataflash IC, in which flash memory is mapped using [MTD](http://www.linux-mtd.infradead.org/doc/general.html) across 5 partitions. Each partition node has a "reg" field which has two arguments, the offset and how large this partition is.
+
+```none
+/*
+ * at91sam9n12ek.dts - Device Tree file for AT91SAM9N12-EK board
+ *
+ *  Copyright (C) 2012 Atmel,
+ *                2012 Hong Xu <hong.xu@atmel.com>
+ *
+ * Licensed under GPLv2 or later.
+ */
+/dts-v1/;
+#include "at91sam9n12.dtsi"
+
+/ {
+    model = "Atmel AT91SAM9N12-EK";
+    compatible = "atmel,at91sam9n12ek", "atmel,at91sam9n12", "atmel,at91sam9";
+
+    memory {
+        reg = <0x20000000 0x4000000>;
+    };
+
+    clocks {
+        main_xtal {
+            clock-frequency = <16000000>;
+        };
+    };
+
+    ahb {
+        apb {
+            dbgu: serial@fffff200 {
+                status = "okay";
+            };
+
+            spi0: spi@f0000000 {
+                status = "okay";
+                cs-gpios = <&pioA 14 0>, <0>, <0>, <0>;
+                flash@0 {
+                    status = "okay";
+                    compatible = "atmel,at45";
+                    spi-max-frequency = <25000000>;
+                    reg = <0>;
+
+                    partitions {
+                        compatible = "fixed-partitions";
+                        #address-cells = <1>;
+                        #size-cells = <1>;
+
+                        partition@0 {
+                            label = "AT91Bootstrap";
+                            reg = <0x00 0x26D8>;
+                            read-only;
+                        };
+
+                        partition@2800 {
+                            label = "DeviceTree";
+                            reg = <0x2800 0x4B00>;
+                            read-only;
+                        };
+
+                        partition@7300 {
+                            label = "zImage";
+                            reg = <0x7300 0x1D8D00>;
+                            read-only;
+                        };
+
+                        partition@1E0000 {
+                            label = "RootFS";
+                            reg = <0x1E0000 0x237C00>;
+                            read-only;
+                        };
+
+                        partition@417C00 {
+                            label = "NonVolatile";
+                            reg = <0x417C00 0x8400>;
+                        };
+                    };
+                };
+            };
+        };
+
+        usb0: ohci@500000 {
+            num-ports = <1>;
+            status = "okay";
+        };
+    };
+};
+```
+
+## Passing to the Kernel
+
+When the kernel boots, it expects the address of where the device tree begins in one of the CPU registers, and therefore be exposed in the address space. Since the AT91SAM9N12 does not expose/map the contents of Dataflash from the SPI periperhal in the address space (not to mention that the kernel will attempt to configure the SPI peripheral by starting up it's driver), it must be copied to DRAM. The only way to do this is to inform the bootloader (AT91 Bootstrap) that we want to copy a device tree from Dataflash to DRAM. This will be shown next, after we get Linux compiling.
