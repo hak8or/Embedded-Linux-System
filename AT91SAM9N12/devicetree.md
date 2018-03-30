@@ -91,18 +91,19 @@ A ```.dts``` file is meant to say what peripherals are present and used in on a 
 
 The driver advertises itself as compatible [here](https://github.com/torvalds/linux/blob/0b412605ef5f5c64b31f19e2910b1d5eba9929c3/drivers/spi/spi-atmel.c#L1820) and pulls in which pins to use as chip select from the Device Tree [here](https://github.com/torvalds/linux/blob/0b412605ef5f5c64b31f19e2910b1d5eba9929c3/drivers/spi/spi-atmel.c#L1492).
 
-Lastly, the device tree is not stored as just a big text file on the device. It's compiled using ```dtc``` into a single ```.dtb``` (device tree binary) file. When the kernel is booting, the address of this file is provided in one of the CPU registers. As time went on, the community has done an amazing job porting much of the old code into a device tree complaint format, as shown [here](https://lwn.net/Articles/572692/) in another probably better writeup. The key take away from this is that a device tree is just a way of describing to the kernel what hardware is present, where in the address map it is, what driver to use for interacting with it, and various optional parameters.
+Lastly, the device tree is not stored as just a big text file on the device. It's compiled using ```dtc``` into a single ```.dtb``` (device tree binary) file. When the kernel is booting, the address of this file is provided in one of the CPU registers. As time went on, the community has done an amazing job porting much of the old code into a device tree complaint format, as shown [here](https://lwn.net/Articles/572692/) in another probably better writeup. Also, the kernel as usual has some solid [documentation](https://www.kernel.org/doc/Documentation/devicetree/usage-model.txt) on device tree usage. There is also an official [standard](https://github.com/devicetree-org/devicetree-specification). The key take away from this is that a device tree is just a way of describing to the kernel what hardware is present, where in the address map it is, what driver to use for interacting with it, and various optional parameters.
 
 ## Custom Device Tree
 
 Time to make our own device tree. We know we want the following;
 
-- Serial port for Dataflash (root file system is not copied to RAM)
+- Serial Port for interacting with the device
+- SPI port for Dataflash (root file system is not copied to RAM)
 - Dataflash IC itself on SPI0 peripheral
 - Partition the Dataflash for all our data
 - USB Host (it's only 4 lines, will use this for a Wifi dongle)
 
-At the top level we have a memory node to tell the kernel where memory is and how much of it the Kerenl is allowed to use, what clock sources there are, and then peripherals mapped onto various busses. In ARM there are a few busses as per spec, in our case the USB peripheral is directly on the AHB bus. From the AHB bus branches off a slower APB bus to which the SPI peripheral is attached to. The SPI bus has only one device, an ```AT45``` based Dataflash IC, in which flash memory is mapped using [MTD](http://www.linux-mtd.infradead.org/doc/general.html) across 5 partitions. Each partition node has a "reg" field which has two arguments, the offset and how large this partition is.
+At the top level we have a memory node to tell the kernel where memory is and how much of it the Kerenl is allowed to use, what clock sources there are, and then peripherals mapped onto various busses. In ARM there are a few busses as per spec, in our case the USB peripheral is directly on the AHB bus. From the AHB bus branches off a slower APB bus to which the SPI peripheral is attached to. The SPI bus has only one device, an ```AT45``` based Dataflash IC, in which flash memory is mapped using [MTD](http://www.linux-mtd.infradead.org/doc/general.html) across 5 partitions. Each partition node has a "reg" field which has two arguments, the offset and how large this partition is. Note that if you want to be able to write to a partition, it must be aligned to a page boundary (528 bytes per page by default for the ```AT45DB321E```).
 
 ```none
 /*
@@ -190,6 +191,21 @@ At the top level we have a memory node to tell the kernel where memory is and ho
     };
 };
 ```
+
+## Chosen Node
+
+Sometimes you might spot a node in the top level called "chosen" which includes the bootargs used to tell the kernel where the rootfs is and more. For example, the ```AT91SAM9N12EK.dts``` file in the kernel has this:
+
+```none
+chosen {
+    bootargs = "root=/dev/mtdblock1 rw rootfstype=jffs2";
+    stdout-path = "serial0:115200n8";
+};
+```
+
+The kernel by [default](https://stackoverflow.com/questions/48801998/passing-bootargs-via-chosen-node-in-device-tree-not-working-for-beaglebone-black?rq=1) attempts to use the boot arguments from the bootloader, so this would be discarded, hence not including it here. Furthermore, AT91Bootstrap seems to have a bug where if you disable the "Override the config kernel command-line" option and enable copying a Device Tree to DRAM, it [fails](https://github.com/linux4sam/at91bootstrap/blob/04efa5500d60a0211d14b6ee60df7ce0a828704d/driver/load_kernel.c#L64) when checking bootargs by claiming it's a null terminated empty string.
+
+![AT91 Bootstrap Bootargs](images/AT91Bootstrap_CMDArgs.PNG)
 
 ## Passing to the Kernel
 
