@@ -7,5 +7,6 @@
     * [AT91 Bootstrap](AT91SAM9N12/AT91_Bootstrap.md)
     * [Device Tree](AT91SAM9N12/devicetree.md)
     * [Buildroot](AT91SAM9N12/buildroot.md)
+    * [Making things smaller](AT91SAM9N12/smaller.md)
     * [Linux](AT91SAM9N12/linux.md)
     * [Old School](AT91SAM9N12/OldSchool/readme.md)

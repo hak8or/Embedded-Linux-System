@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Linux · GitBook</title>
+        <title>Making things smaller · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="OldSchool/readme.html" />
+    <link rel="next" href="linux.html" />
     
     
-    <link rel="prev" href="smaller.html" />
+    <link rel="prev" href="buildroot.html" />
     
 
     </head>
@@ -181,7 +181,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.5" data-path="smaller.html">
+        <li class="chapter active" data-level="1.3.5" data-path="smaller.html">
             
                 <a href="smaller.html">
             
@@ -194,7 +194,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.3.6" data-path="linux.html">
+        <li class="chapter " data-level="1.3.6" data-path="linux.html">
             
                 <a href="linux.html">
             
@@ -255,7 +255,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Linux</a>
+        <a href=".." >Making things smaller</a>
     </h1>
 </div>
 
@@ -270,7 +270,35 @@
     
                                 <section class="normal markdown-section">
                                 
-                                
+                                <h1 id="making-things-smaller">Making things smaller</h1>
+<h2 id="measuring">Measuring</h2>
+<p>As shown earlier, we have a <code>2.7 MB</code> zImage (kerenel image) when our size limit is <code>1.846 MB</code>, and our root file system is <code>1.2 MB</code> which is under the max of <code>2.217 MB</code>. There are two points of confusion here:</p>
+<ul>
+<li>Why is the root file system so large? It should only have busybox with <code>libc</code> and <code>libc++</code> which when combined shouldn&apos;t be over a megabyte.</li>
+<li>What can we remove from the zImage to get the kernel size down while still have a decently functional system?</li>
+</ul>
+<p>Lets look at the root file system first since Buildroot provides <code>make graph-size</code>. This will let us see what is occupying so much space in our rootfs via nice plots and csv files in the <code>output/graphs</code> folder. Keep in mind that &quot;Total filesystem size&quot; is the uncompressed version, meaning no compression has been applied. After pumping the root filesystem through squashfs and then compressing it with xz it drops from <code>3.5 MB</code> down to <code>1.2 MB</code>. </p>
+<p><img src="images/RootFS_Size0.PNG" alt="Root File System"></p>
+<p>Hm, that is unusual, what the heck is &quot;Linux&quot;? The kernel isn&apos;t in the root file system (it&apos;s put in a totally separate area in data flash). Unknown is also worth looking into. Thankfully Buildroot also generates a file called <code>file-size-stats.csv</code>. The contents help give us more information, of which a trimmed version is below.</p>
+<pre><code class="lang-none">[hak8or@hak8or graphs]$ cat file-size-stats.csv | awk &apos;{gsub(&quot;lib/modules/4.15.7/kernel/drivers/&quot;, &quot;...&quot;); print}&apos; | column -s, -t | grep -v &quot; 4096 &quot; | sort -n -k 3 | tail -n 10
+File name                                                    Package name          File size  Package size  File size in package (%)  File size in system (%)
+...net/wireless/realtek/rtlwifi/rtl8192c/rtl8192c-common.ko  linux                 48268      1130774       4.3                       1.3
+...net/wireless/ralink/rt2x00/rt2x00lib.ko                   linux                 48736      1130774       4.3                       1.3
+...net/wireless/ralink/rt2x00/rt2800usb.ko                   linux                 49804      1130774       4.4                       1.4
+...net/wireless/marvell/libertas/libertas.ko                 linux                 65316      1130774       5.8                       1.8
+...net/wireless/realtek/rtlwifi/rtlwifi.ko                   linux                 75804      1130774       6.7                       2.1
+...net/wireless/realtek/rtlwifi/rtl8192cu/rtl8192cu.ko       linux                 82528      1130774       7.3                       2.3
+...net/wireless/ralink/rt2x00/rt2800lib.ko                   linux                 96488      1130774       8.5                       2.7
+...net/wireless/marvell/mwifiex/mwifiex.ko                   linux                 275384     1130774       24.4                      7.6
+lib/libuClibc-1.0.28.so                                      uclibc                489384     562728        87.0                      13.5
+bin/busybox                                                  busybox               719316     722918        99.5                      19.9
+</code></pre>
+<p>This tells us that a decent portion of the files seem to be device drivers for various USB based wireless dongles, and they all come from the linux package.</p>
+<h2 id="kernel">Kernel</h2>
+<p>The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the &quot;Linux&quot; package. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as &quot;Modules&quot;. For example, in the below image of the kernel configuration, the &quot;Marvel WiFi-Ex&quot; drivers are compiled as modules while the &quot;Realtek rtlwifi&quot; drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. </p>
+<p><img src="images/Buildroot_Kernel_Module.PNG" alt="Kernel Modules vs inimage"></p>
+<p>Buildroot lets you access various packages (one of which is Linux) through the make tool in the format of <code>make *packagename*-make/menuconfig/nconfig/clean/rebuild</code>. For example, to view the menuconfig of the Linux kernel using nconfig, then you should use <code>make linux-nconfig</code>. Looking around in there, we can see there are many options which are enabled, such as networking, </p>
+
                                 
                                 </section>
                             
@@ -297,12 +325,12 @@
 
             
                 
-                <a href="smaller.html" class="navigation navigation-prev " aria-label="Previous page: Making things smaller">
+                <a href="buildroot.html" class="navigation navigation-prev " aria-label="Previous page: Buildroot">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="OldSchool/readme.html" class="navigation navigation-next " aria-label="Next page: Old School">
+                <a href="linux.html" class="navigation navigation-next " aria-label="Next page: Linux">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -313,7 +341,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Linux","level":"1.3.6","depth":2,"next":{"title":"Old School","level":"1.3.7","depth":2,"path":"AT91SAM9N12/OldSchool/readme.md","ref":"AT91SAM9N12/OldSchool/readme.md","articles":[]},"previous":{"title":"Making things smaller","level":"1.3.5","depth":2,"path":"AT91SAM9N12/smaller.md","ref":"AT91SAM9N12/smaller.md","articles":[]},"dir":"neutral"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/linux.md","mtime":"2018-03-29T06:52:55.799Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-04T05:12:31.041Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Making things smaller","level":"1.3.5","depth":2,"next":{"title":"Linux","level":"1.3.6","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"Buildroot","level":"1.3.4","depth":2,"path":"AT91SAM9N12/buildroot.md","ref":"AT91SAM9N12/buildroot.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/smaller.md","mtime":"2018-04-04T05:12:11.959Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-04T05:12:31.041Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

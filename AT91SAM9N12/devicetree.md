@@ -194,7 +194,7 @@ At the top level we have a memory node to tell the kernel where memory is and ho
 
 ## Chosen Node
 
-Sometimes you might spot a node in the top level called "chosen" which includes the bootargs used to tell the kernel where the rootfs is and more. For example, the ```AT91SAM9N12EK.dts``` file in the kernel has this:
+Sometimes you might spot a node in the top level called "chosen" which includes the bootargs used to tell the kernel where the rootfs is and more. For example, the ```AT91SAM9N12EK.dts``` file in the kernel says, via the "chosen" node, that there is a root file system in the the second partition of flash which is both readable and writable under the [JFFS2](http://www.linux-mtd.infradead.org/doc/jffs2.html) file system. Also, all output going to stdout will be put in the first serial port at a baud rate of 115200 with no parity bits and 8 bits per character.
 
 ```none
 chosen {
