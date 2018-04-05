@@ -297,7 +297,195 @@ bin/busybox                                                  busybox            
 <h2 id="kernel">Kernel</h2>
 <p>The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the &quot;Linux&quot; package. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as &quot;Modules&quot; which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the &quot;Marvel WiFi-Ex&quot; drivers are compiled as modules while the &quot;Realtek rtlwifi&quot; drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. </p>
 <p><img src="images/Buildroot_Kernel_Module.PNG" alt="Kernel Modules vs inimage"></p>
-<p>Buildroot lets you access various packages (one of which is Linux) through the make tool in the format of <code>make *packagename*-make/menuconfig/nconfig/clean/rebuild</code>. For example, to view the menuconfig of the Linux kernel using nconfig, then you should use <code>make linux-nconfig</code>. Looking around in there, we can see there are many options which are enabled, such as networking, </p>
+<p>Buildroot lets you access various packages (one of which is Linux) through the make tool in the format of <code>make *packagename*-make/menuconfig/nconfig/clean/rebuild</code>. For example, to view the menuconfig of the Linux kernel using nconfig, then you should use <code>make linux-nconfig</code>. Looking around in there, we can see there are many options which are enabled, such as networking and these device drivers.</p>
+<p>As a reminder, our goal is to have our system do the following:</p>
+<ul>
+<li>Boot to a shell and be able to communicate with it over serial</li>
+<li>Networking support</li>
+<li>Use the <a href="https://wikidevi.com/wiki/Rosewill_RNX-N150HG" target="_blank">RNX-N150HG</a> USB Wifi dongle to talk to the outside world</li>
+<li>Read only file system with compression (SquashFS)</li>
+<li>Run various tools (htop, stress, tmux, ping)</li>
+<li>If possible, an ssh server and <a href="https://www.wikiwand.com/en/Tiny_C_Compiler" target="_blank">TCC</a> to compile a small C based demo program</li>
+</ul>
+<p>Things we do not need:</p>
+<ul>
+<li>Video output (no Xorg or VGA or DVI)</li>
+<li>Audio output (no I2S)</li>
+<li>Any file system other than SquashFS</li>
+</ul>
+<h3 id="non-relevant-wireless-usb-drivers">Non Relevant Wireless USB drivers</h3>
+<p>We only need to support the Atheros <code>AR9002U</code> chipset and Atheros <code>AR9271</code>wireless chip. The driver for this is called <strong>ath9k_htc Drivers</strong> according to the <a href="https://wikidevi.com/wiki/Rosewill_RNX-N150HG" target="_blank">wikidev</a> site. It is not clear on what this driver is listed under in the kernel configratuion, so simply searching for symbols with &quot;ath9k&quot; when using the nconfig viewer gives this.</p>
+<p><img src="images/Linux_ath9k_search.PNG" alt="ATH9k Search"></p>
+<p>This tells us we need to go into <code>Device Drivers -&gt; Network device Support -&gt; Wireless LAN</code> and enable the <code>Atheros/Qualcomm devices</code> node to enable the <code>ATH9k</code> driver. This is a general driver for the Atheros and Qualcomm interface though, not the specific chipset we are using. If I can&apos;t find the information I need via a symbol search then usually searching the <a href="https://github.com/torvalds/linux" target="_blank">kernel mirror</a> on Github will give what you need. In our case, searching for the <code>AR9271</code> keyword in the repository gives us <a href="https://github.com/torvalds/linux/blob/b2fe5fa68642860e7de76167c3111623aa0d5de1/drivers/net/wireless/ath/ath9k/Kconfig#L169" target="_blank">this</a>, showing that we also need to enable <code>ATH9k_HTC</code>. If we enable these two components and disable all other entries in <code>Wireless LAN</code> then the size of the zImage is still <code>2.7MB</code> but the compressed rootfs is only <code>848KB</code>, which is a savings of <code>380KB</code> compared to the previous <code>1.2MB</code>!</p>
+<h3 id="non-relevant-kernel-modules">Non Relevant kernel modules</h3>
+<p>While our root file system dropped to satisfactory levels, our kernel image is still far too large. Here is a chart showing all the kernel functionality which can be removed while still being able to satisfy our intended functionality.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Component Name</th>
+<th style="text-align:left">zImage size in kB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Graphics support (DRM, backlight, logo, framebuffer)</td>
+<td style="text-align:left">169 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">ext4 in Fle Systems</td>
+<td style="text-align:left">138 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Network FIle Systems in File systems</td>
+<td style="text-align:left">112 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">soundcard support</td>
+<td style="text-align:left">84 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Miscellaneous file systems (UBIFS) in File systems</td>
+<td style="text-align:left">77 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Multimedia support</td>
+<td style="text-align:left">62 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">SCSI device support</td>
+<td style="text-align:left">56 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">MMC SD SDIO card support</td>
+<td style="text-align:left">46 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Enable Stack unwinding support</td>
+<td style="text-align:left">39 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">UBI Support</td>
+<td style="text-align:left">32 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">NAND device support in Memory Technolog Device (MTD) support</td>
+<td style="text-align:left">28.5 KB</td>
+</tr>
+<tr>
+<td style="text-align:left">USB Gadget</td>
+<td style="text-align:left">28 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">HID</td>
+<td style="text-align:left">27.8 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">vfat in DOS/FAT/NT file systems</td>
+<td style="text-align:left">20 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Industrial IO support</td>
+<td style="text-align:left">19 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Suspend to RAM and standby</td>
+<td style="text-align:left">16.6 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Ethernet Driver in Network device support</td>
+<td style="text-align:left">15 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Initial RAM disk/file system</td>
+<td style="text-align:left">14.5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">EHCI HCD</td>
+<td style="text-align:left">14.4 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">voltage and current regulator support</td>
+<td style="text-align:left">14 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">PHY Device support in Network Device Support</td>
+<td style="text-align:left">13 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">I2C Support</td>
+<td style="text-align:left">12.8 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Real Time Clock</td>
+<td style="text-align:left">11.5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">all input device support</td>
+<td style="text-align:left">11 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">USB Serial Converter</td>
+<td style="text-align:left">11 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">SquashFS with only XZ</td>
+<td style="text-align:left">6.7 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">PPS + PTP</td>
+<td style="text-align:left">5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">PWM Support</td>
+<td style="text-align:left">5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">USB Modem (CDC ACM)</td>
+<td style="text-align:left">5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Watchdog timer support</td>
+<td style="text-align:left">3.7 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Power supply class support</td>
+<td style="text-align:left">3.5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">NVMEM</td>
+<td style="text-align:left">2.3 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Board level reset or power off</td>
+<td style="text-align:left">2kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Atmel HLCDC (High-end LCD Controller)</td>
+<td style="text-align:left">1.7 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">MDIO Bus Device Drivers</td>
+<td style="text-align:left">1.5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Atmel SOC AT91RM9200</td>
+<td style="text-align:left">1 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Verbose user fault messages</td>
+<td style="text-align:left">0.5 kB</td>
+</tr>
+<tr>
+<td style="text-align:left">Atheros and HTC driver (+116 kB)</td>
+<td style="text-align:left">94 kB</td>
+</tr>
+</tbody>
+</table>
+<p>After removing all of these, we have a file size as follows;</p>
+<pre><code class="lang-bash">-rw-r--r-- 1 hak8or users  987136 Apr  5 03:09 rootfs.squashfs
+-rw-r--r-- 1 hak8or users 1709472 Apr  5 03:09 zImage
+</code></pre>
+<p><a href="https://elinux.org/Kernel_Size_Tuning_Guide" target="_blank">https://elinux.org/Kernel_Size_Tuning_Guide</a></p>
 
                                 
                                 </section>
@@ -341,7 +529,7 @@ bin/busybox                                                  busybox            
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Making things smaller","level":"1.3.5","depth":2,"next":{"title":"Linux","level":"1.3.6","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"Buildroot","level":"1.3.4","depth":2,"path":"AT91SAM9N12/buildroot.md","ref":"AT91SAM9N12/buildroot.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/smaller.md","mtime":"2018-04-04T05:15:35.989Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-04T05:15:44.850Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Making things smaller","level":"1.3.5","depth":2,"next":{"title":"Linux","level":"1.3.6","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"Buildroot","level":"1.3.4","depth":2,"path":"AT91SAM9N12/buildroot.md","ref":"AT91SAM9N12/buildroot.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/smaller.md","mtime":"2018-04-05T08:01:51.061Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-05T08:02:10.455Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

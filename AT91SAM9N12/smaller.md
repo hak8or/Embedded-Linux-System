@@ -36,5 +36,83 @@ The Linux kernel is a monolithic kernel, meaning the entire Operating System is 
 
 ![Kernel Modules vs inimage](images/Buildroot_Kernel_Module.PNG)
 
-Buildroot lets you access various packages (one of which is Linux) through the make tool in the format of ```make *packagename*-make/menuconfig/nconfig/clean/rebuild```. For example, to view the menuconfig of the Linux kernel using nconfig, then you should use ```make linux-nconfig```. Looking around in there, we can see there are many options which are enabled, such as networking, 
+Buildroot lets you access various packages (one of which is Linux) through the make tool in the format of ```make *packagename*-make/menuconfig/nconfig/clean/rebuild```. For example, to view the menuconfig of the Linux kernel using nconfig, then you should use ```make linux-nconfig```. Looking around in there, we can see there are many options which are enabled, such as networking and these device drivers.
+
+As a reminder, our goal is to have our system do the following:
+
+- Boot to a shell and be able to communicate with it over serial
+- Networking support
+- Use the [RNX-N150HG](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) USB Wifi dongle to talk to the outside world
+- Read only file system with compression (SquashFS)
+- Run various tools (htop, stress, tmux, ping)
+- If possible, an ssh server and [TCC](https://www.wikiwand.com/en/Tiny_C_Compiler) to compile a small C based demo program
+
+Things we do not need:
+
+- Video output (no Xorg or VGA or DVI)
+- Audio output (no I2S)
+- Any file system other than SquashFS
+
+### Non Relevant Wireless USB drivers
+
+We only need to support the Atheros ```AR9002U``` chipset and Atheros ```AR9271```wireless chip. The driver for this is called **ath9k_htc Drivers** according to the [wikidev](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) site. It is not clear on what this driver is listed under in the kernel configratuion, so simply searching for symbols with "ath9k" when using the nconfig viewer gives this.
+
+![ATH9k Search](images/Linux_ath9k_search.PNG)
+
+This tells us we need to go into ```Device Drivers -> Network device Support -> Wireless LAN``` and enable the ```Atheros/Qualcomm devices``` node to enable the ```ATH9k``` driver. This is a general driver for the Atheros and Qualcomm interface though, not the specific chipset we are using. If I can't find the information I need via a symbol search then usually searching the [kernel mirror](https://github.com/torvalds/linux) on Github will give what you need. In our case, searching for the ```AR9271``` keyword in the repository gives us [this](https://github.com/torvalds/linux/blob/b2fe5fa68642860e7de76167c3111623aa0d5de1/drivers/net/wireless/ath/ath9k/Kconfig#L169), showing that we also need to enable ```ATH9k_HTC```. If we enable these two components and disable all other entries in ```Wireless LAN``` then the size of the zImage is still ```2.7MB``` but the compressed rootfs is only ```848KB```, which is a savings of ```380KB``` compared to the previous ```1.2MB```!
+
+### Non Relevant kernel modules
+
+While our root file system dropped to satisfactory levels, our kernel image is still far too large. Here is a chart showing all the kernel functionality which can be removed while still being able to satisfy our intended functionality.
+
+| Component Name | zImage size in kB |
+| :------------- | :---------------- |
+| Graphics support (DRM, backlight, logo, framebuffer) | 169 kB |
+| ext4 in Fle Systems | 138 kB |
+| Network FIle Systems in File systems | 112 kB |
+| soundcard support | 84 kB |
+| Miscellaneous file systems (UBIFS) in File systems | 77 kB |
+| Multimedia support | 62 kB |
+| SCSI device support | 56 kB |
+| MMC SD SDIO card support | 46 kB |
+| Enable Stack unwinding support | 39 kB |
+| UBI Support | 32 kB |
+| NAND device support in Memory Technolog Device (MTD) support | 28.5 KB |
+| USB Gadget | 28 kB |
+| HID | 27.8 kB |
+| vfat in DOS/FAT/NT file systems | 20 kB |
+| Industrial IO support | 19 kB |
+| Suspend to RAM and standby | 16.6 kB |
+| Ethernet Driver in Network device support | 15 kB |
+| Initial RAM disk/file system | 14.5 kB |
+| EHCI HCD | 14.4 kB |
+| voltage and current regulator support | 14 kB |
+| PHY Device support in Network Device Support | 13 kB |
+| I2C Support | 12.8 kB |
+| Real Time Clock | 11.5 kB |
+| all input device support | 11 kB |
+| USB Serial Converter | 11 kB |
+| SquashFS with only XZ | 6.7 kB |
+| PPS + PTP | 5 kB |
+| PWM Support | 5 kB |
+| USB Modem (CDC ACM) | 5 kB |
+| Watchdog timer support | 3.7 kB |
+| Power supply class support | 3.5 kB |
+| NVMEM | 2.3 kB |
+| Board level reset or power off | 2kB |
+| Atmel HLCDC (High-end LCD Controller) | 1.7 kB |
+| MDIO Bus Device Drivers | 1.5 kB |
+| Atmel SOC AT91RM9200 | 1 kB |
+| Verbose user fault messages | 0.5 kB |
+| Atheros and HTC driver (+116 kB) | 94 kB |
+
+After removing all of these, we have a file size as follows;
+
+```bash
+-rw-r--r-- 1 hak8or users  987136 Apr  5 03:09 rootfs.squashfs
+-rw-r--r-- 1 hak8or users 1709472 Apr  5 03:09 zImage
+```
+
+https://elinux.org/Kernel_Size_Tuning_Guide
+
 
