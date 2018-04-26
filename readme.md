@@ -8,6 +8,8 @@ I like to dabble in embedded systems, this is my bread and butter. During colleg
 
 This projects therefore served three purposes; first to make a Linux capable board because that's just too awesome, secondly to create a guide (and reference for myself) for someone who was exactly in my situation in terms of knowledge, and thirdly to get those three credits. This was done using hardware available to me as a hobbyist (Broadcom scoffs at emails asking for pricing in small volume from mere mortals like myself) in 2015, and limitations of OSH Park's 4 layer service to make PCB's.
 
+Please note, this writeup is **still in progress**! Typos and wierd grammar galore.
+
 ## Structure
 This is divided into two designs, [one design](AT91SAM9N12/readme.md) being Atmel's AT91SAM9N12 which is the currently working board, and [the other](MX233/readme.md) being Freescale's I.MX223. Each project directory contains schematics, board files, potentially necessary patches, and various helper scripts.
 
