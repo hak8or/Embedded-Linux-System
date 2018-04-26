@@ -499,7 +499,7 @@ aw :(
 +   <span class="hljs-keyword">return</span> (parent_rate / pll-&gt;div) * (pll-&gt;mul + <span class="hljs-number">1</span>);
  }
 </code></pre>
-<p>Further exploring shows that this was <a href="https://github.com/torvalds/linux/commit/87e2ed338f1b56798807ccf12eb6112d25062202" target="_blank">attempted</a> years ago, but <a href="http://lists.infradead.org/pipermail/linux-arm-kernel/2014-September/283501.html" target="_blank">sadly</a> it seemingly didn&apos;t get accepted.</p>
+<p>Further exploring shows that this was <a href="http://lists.infradead.org/pipermail/linux-arm-kernel/2014-September/283501.html" target="_blank">fixed</a> years ago and was accepted, but later <a href="https://github.com/torvalds/linux/commit/1bdf02326b71eae7e9b4b335b881856aaf9d1af6#diff-59deeffcefca5a5972c4ab07b6d478deL155" target="_blank">undone</a>.</p>
 <p>Now we plug it in and what do we get?</p>
 <pre><code class="lang-none">usb 1-1: new full-speed USB device number 3 using at91_ohci
 usb 1-1: New USB device found, idVendor=0cf3, idProduct=9271
@@ -552,7 +552,7 @@ usb 1-1: SerialNumber: 12345
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"USB","level":"1.2.6","depth":2,"next":{"title":"Linux","level":"1.2.7","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"zImage minifying","level":"1.2.5","depth":2,"path":"AT91SAM9N12/smallerzimage.md","ref":"AT91SAM9N12/smallerzimage.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/USB.md","mtime":"2018-04-26T20:23:27.361Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T20:28:33.428Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"USB","level":"1.2.6","depth":2,"next":{"title":"Linux","level":"1.2.7","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"zImage minifying","level":"1.2.5","depth":2,"path":"AT91SAM9N12/smallerzimage.md","ref":"AT91SAM9N12/smallerzimage.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/USB.md","mtime":"2018-04-26T21:12:21.682Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T21:12:41.821Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -560,10 +560,6 @@ usb 1-1: SerialNumber: 12345
         
     <script src="../gitbook/gitbook.js"></script>
     <script src="../gitbook/theme.js"></script>
-    
-        
-        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
-        
     
         
         <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>

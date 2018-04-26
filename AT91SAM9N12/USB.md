@@ -266,7 +266,7 @@ static unsigned long clk_pll_recalc_rate(struct clk_hw *hw,
  }
 ```
 
-Further exploring shows that this was [attempted](https://github.com/torvalds/linux/commit/87e2ed338f1b56798807ccf12eb6112d25062202) years ago, but [sadly](http://lists.infradead.org/pipermail/linux-arm-kernel/2014-September/283501.html) it seemingly didn't get accepted.
+Further exploring shows that this was [fixed](http://lists.infradead.org/pipermail/linux-arm-kernel/2014-September/283501.html) years ago and was accepted, but later [undone](https://github.com/torvalds/linux/commit/1bdf02326b71eae7e9b4b335b881856aaf9d1af6#diff-59deeffcefca5a5972c4ab07b6d478deL155).
 
 Now we plug it in and what do we get?
 
