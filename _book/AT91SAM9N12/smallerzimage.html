@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Making things smaller · GitBook</title>
+        <title>zImage minifying · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="linux.html" />
+    <link rel="next" href="USB.html" />
     
     
     <link rel="prev" href="buildroot.html" />
@@ -181,12 +181,12 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.3.5" data-path="smaller.html">
+        <li class="chapter active" data-level="1.3.5" data-path="smallerzimage.html">
             
-                <a href="smaller.html">
+                <a href="smallerzimage.html">
             
                     
-                    Making things smaller
+                    zImage minifying
             
                 </a>
             
@@ -194,7 +194,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.6" data-path="linux.html">
+        <li class="chapter " data-level="1.3.6" data-path="USB.html">
+            
+                <a href="USB.html">
+            
+                    
+                    USB
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.7" data-path="linux.html">
             
                 <a href="linux.html">
             
@@ -207,7 +220,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.7" data-path="OldSchool/readme.html">
+        <li class="chapter " data-level="1.3.8" data-path="OldSchool/readme.html">
             
                 <a href="OldSchool/readme.html">
             
@@ -255,7 +268,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Making things smaller</a>
+        <a href=".." >zImage minifying</a>
     </h1>
 </div>
 
@@ -270,8 +283,8 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="making-things-smaller">Making things smaller</h1>
-<h2 id="measuring">Measuring</h2>
+                                <h1 id="zimage-minifying">zImage minifying</h1>
+<h2 id="measurements">Measurements</h2>
 <p>As shown earlier, we have a <code>2.7 MB</code> zImage (kerenel image) when our size limit is <code>1.846 MB</code>, and our root file system is <code>1.2 MB</code> which is under the max of <code>2.217 MB</code>. There are two points of confusion here:</p>
 <ul>
 <li>Why is the root file system so large? It should only have busybox with <code>libc</code> and <code>libc++</code> which when combined shouldn&apos;t be over a megabyte.</li>
@@ -293,9 +306,9 @@ File name                                                    Package name       
 lib/libuClibc-1.0.28.so                                      uclibc                489384     562728        87.0                      13.5
 bin/busybox                                                  busybox               719316     722918        99.5                      19.9
 </code></pre>
-<p>This tells us that a decent portion of the files seem to be device drivers for various USB based wireless dongles, and they all come from the linux package.</p>
+<p>This tells us that a decent portion of the files seem to be device drivers for various USB based wireless dongles, and they all come from the Linux package.</p>
 <h2 id="kernel">Kernel</h2>
-<p>The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the &quot;Linux&quot; package. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as &quot;Modules&quot; which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the &quot;Marvel WiFi-Ex&quot; drivers are compiled as modules while the &quot;Realtek rtlwifi&quot; drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. </p>
+<p>The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the &quot;Linux&quot; package. <a href="https://elinux.org/Kernel_Size_Tuning_Guide" target="_blank">Here</a> is a great guide on how to measure and tune the size of the kernel, some of which we will be using here. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as &quot;Modules&quot; which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the &quot;Marvel WiFi-Ex&quot; drivers are compiled as modules while the &quot;Realtek rtlwifi&quot; drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. </p>
 <p><img src="images/Buildroot_Kernel_Module.PNG" alt="Kernel Modules vs inimage"></p>
 <p>Buildroot lets you access various packages (one of which is Linux) through the make tool in the format of <code>make *packagename*-make/menuconfig/nconfig/clean/rebuild</code>. For example, to view the menuconfig of the Linux kernel using nconfig, then you should use <code>make linux-nconfig</code>. Looking around in there, we can see there are many options which are enabled, such as networking and these device drivers.</p>
 <p>As a reminder, our goal is to have our system do the following:</p>
@@ -340,6 +353,10 @@ bin/busybox                                                  busybox            
 <td style="text-align:left">112 kB</td>
 </tr>
 <tr>
+<td style="text-align:left">Atheros and HTC driver as Module (+116 kB to RootFS)</td>
+<td style="text-align:left">94 kB</td>
+</tr>
+<tr>
 <td style="text-align:left">soundcard support</td>
 <td style="text-align:left">84 kB</td>
 </tr>
@@ -368,7 +385,7 @@ bin/busybox                                                  busybox            
 <td style="text-align:left">32 kB</td>
 </tr>
 <tr>
-<td style="text-align:left">NAND device support in Memory Technolog Device (MTD) support</td>
+<td style="text-align:left">NAND device support in Memory Technology Device (MTD) support</td>
 <td style="text-align:left">28.5 KB</td>
 </tr>
 <tr>
@@ -404,7 +421,7 @@ bin/busybox                                                  busybox            
 <td style="text-align:left">14.4 kB</td>
 </tr>
 <tr>
-<td style="text-align:left">voltage and current regulator support</td>
+<td style="text-align:left">Voltage and current regulator support</td>
 <td style="text-align:left">14 kB</td>
 </tr>
 <tr>
@@ -428,7 +445,7 @@ bin/busybox                                                  busybox            
 <td style="text-align:left">11 kB</td>
 </tr>
 <tr>
-<td style="text-align:left">SquashFS with only XZ</td>
+<td style="text-align:left">SquashFS with only XZ (removed other compression)</td>
 <td style="text-align:left">6.7 kB</td>
 </tr>
 <tr>
@@ -475,17 +492,33 @@ bin/busybox                                                  busybox            
 <td style="text-align:left">Verbose user fault messages</td>
 <td style="text-align:left">0.5 kB</td>
 </tr>
-<tr>
-<td style="text-align:left">Atheros and HTC driver (+116 kB)</td>
-<td style="text-align:left">94 kB</td>
-</tr>
 </tbody>
 </table>
 <p>After removing all of these, we have a file size as follows;</p>
 <pre><code class="lang-bash">-rw-r--r-- 1 hak8or users  987136 Apr  5 03:09 rootfs.squashfs
 -rw-r--r-- 1 hak8or users 1709472 Apr  5 03:09 zImage
 </code></pre>
-<p><a href="https://elinux.org/Kernel_Size_Tuning_Guide" target="_blank">https://elinux.org/Kernel_Size_Tuning_Guide</a></p>
+<h2 id="whats-else">What&apos;s else</h2>
+<p>When the kernel gets compiled many object files (with a <code>.o</code> extension) get generated. These are files which get put linked into the kernel image during the compilation process. We can use these files to get a rough estimate of what&apos;s taking up space. The zImage is well below our limit, so we do not need to change anything here, this is just for curiosity&apos;s sake. As we can see, a large portion of this is networking related (ipv4 and ipv6 stack), and some are various drivers used for wifi.</p>
+<pre><code>[hak8or@hak8or build]$ size */built-in.o | sort -n -r -k 4 | head -n 30
+ 102937      93    1040  104070   19686 linux-4.15.7/net/wireless/nl80211.o (ex linux-4.15.7/built-in.o)
+  47725    1529     492   49746    c252 linux-4.15.7/net/core/dev.o (ex linux-4.15.7/built-in.o)
+  15770     216   28056   44042    ac0a linux-4.15.7/kernel/printk/printk.o (ex linux-4.15.7/built-in.o)
+  41269     536    1176   42981    a7e5 linux-4.15.7/net/ipv6/addrconf.o (ex linux-4.15.7/built-in.o)
+  36370      13       8   36391    8e27 linux-4.15.7/net/ipv4/tcp_input.o (ex linux-4.15.7/built-in.o)
+  35840     314       0   36154    8d3a linux-4.15.7/net/core/skbuff.o (ex linux-4.15.7/built-in.o)
+  33790      30       0   33820    841c linux-4.15.7/net/mac80211/mlme.o (ex linux-4.15.7/built-in.o)
+  28294     287    2128   30709    77f5 linux-4.15.7/drivers/tty/vt/vt.o (ex linux-4.15.7/built-in.o)
+  28541     675       1   29217    7221 linux-4.15.7/net/ipv6/route.o (ex linux-4.15.7/built-in.o)
+  28037      68    1044   29149    71dd linux-4.15.7/net/core/rtnetlink.o (ex linux-4.15.7/built-in.o)
+  28582     156      12   28750    704e linux-4.15.7/drivers/usb/core/hub.o (ex linux-4.15.7/built-in.o)
+  27864       9       0   27873    6ce1 linux-4.15.7/net/mac80211/tx.o (ex linux-4.15.7/built-in.o)
+  26977     360       0   27337    6ac9 linux-4.15.7/crypto/aes_generic.o (ex linux-4.15.7/built-in.o)
+  26657       9       0   26666    682a linux-4.15.7/fs/namei.o (ex linux-4.15.7/built-in.o)
+  25811     533       4   26348    66ec linux-4.15.7/net/core/filter.o (ex linux-4.15.7/built-in.o)
+  25857     287       2   26146    6622 linux-4.15.7/net/packet/af_packet.o (ex linux-4.15.7/built-in.o)
+  26055       0       0   26055    65c7 linux-4.15.7/lib/crc32.o (ex linux-4.15.7/built-in.o)
+</code></pre><p>Next up is fixing an issue with USB seemingly not working.</p>
 
                                 
                                 </section>
@@ -518,7 +551,7 @@ bin/busybox                                                  busybox            
                 </a>
                 
                 
-                <a href="linux.html" class="navigation navigation-next " aria-label="Next page: Linux">
+                <a href="USB.html" class="navigation navigation-next " aria-label="Next page: USB">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -529,7 +562,7 @@ bin/busybox                                                  busybox            
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Making things smaller","level":"1.3.5","depth":2,"next":{"title":"Linux","level":"1.3.6","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"Buildroot","level":"1.3.4","depth":2,"path":"AT91SAM9N12/buildroot.md","ref":"AT91SAM9N12/buildroot.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/smaller.md","mtime":"2018-04-05T08:01:51.061Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-05T08:02:10.455Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"zImage minifying","level":"1.3.5","depth":2,"next":{"title":"USB","level":"1.3.6","depth":2,"path":"AT91SAM9N12/USB.md","ref":"AT91SAM9N12/USB.md","articles":[]},"previous":{"title":"Buildroot","level":"1.3.4","depth":2,"path":"AT91SAM9N12/buildroot.md","ref":"AT91SAM9N12/buildroot.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/smallerzimage.md","mtime":"2018-04-26T18:43:34.288Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T18:39:01.629Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -537,6 +570,10 @@ bin/busybox                                                  busybox            
         
     <script src="../gitbook/gitbook.js"></script>
     <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
     
         
         <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>

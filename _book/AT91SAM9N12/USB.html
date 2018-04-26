@@ -1,0 +1,587 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>USB · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="linux.html" />
+    
+    
+    <link rel="prev" href="smallerzimage.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../MX233/readme.html">
+            
+                <a href="../MX233/readme.html">
+            
+                    
+                    MX233
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="readme.html">
+            
+                <a href="readme.html">
+            
+                    
+                    SAM9N12
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="SAMBA.html">
+            
+                <a href="SAMBA.html">
+            
+                    
+                    SAM-BA
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="AT91_Bootstrap.html">
+            
+                <a href="AT91_Bootstrap.html">
+            
+                    
+                    AT91 Bootstrap
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="devicetree.html">
+            
+                <a href="devicetree.html">
+            
+                    
+                    Device Tree
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="buildroot.html">
+            
+                <a href="buildroot.html">
+            
+                    
+                    Buildroot
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="smallerzimage.html">
+            
+                <a href="smallerzimage.html">
+            
+                    
+                    zImage minifying
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.6" data-path="USB.html">
+            
+                <a href="USB.html">
+            
+                    
+                    USB
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.7" data-path="linux.html">
+            
+                <a href="linux.html">
+            
+                    
+                    Linux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="OldSchool/readme.html">
+            
+                <a href="OldSchool/readme.html">
+            
+                    
+                    Old School
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >USB</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="usb">USB</h1>
+<p>Our board has two USB ports, one hardwired to be a USB slave (connect to a USB Host like your desktop), and the other being a USB OTG port (can run as both a slave and host). The underlying peripheral hardware in the SOC is designed to work with the <a href="https://wiki.osdev.org/Open_Host_Controller_Interface" target="_blank">OHCI standard</a>. Since this port is USB 2.0, This results in the registers used to access the device being the same across all OHCI implementations and therefore being able to use a common driver. This is why in the kernel the OHCI driver has been enabled.</p>
+<p>So, we should be able to just plug in our USB wifi dongle and it should work, right?</p>
+<pre><code class="lang-none"># echo &quot;Hello world&quot;
+Hello world
+# usb 1-1: new full-speed USB device number 2 using at91_ohci
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: new full-speed USB device number 3 using at91_ohci
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: device descriptor read/64, error -62
+usb usb1-port1: attempt power cycle
+usb 1-1: new full-speed USB device number 4 using at91_ohci
+usb 1-1: device not accepting address 4, error -62
+usb 1-1: new full-speed USB device number 5 using at91_ohci
+usb 1-1: device not accepting address 5, error -62
+usb usb1-port1: unable to enumerate USB device
+echo &quot;aw :(&quot;
+aw :(
+</code></pre>
+<p>We see a few things here.</p>
+<ul>
+<li>The correct driver (at91_ohci) is being used for the peripheral.</li>
+<li>The correct USB port is being used.</li>
+<li>Correctly recognizing USB full-speed capability.</li>
+<li>Driver is giving USB device an address during enumeration but device fails.</li>
+<li>Device descriptor read (part of enumeration process) is failing.</li>
+</ul>
+<p>The last point shouldn&apos;t ever really happen, it means the Host is asking the device for simple data but the host is not getting anything back. Usually this means there is a communication issue, like a bad cable or the USB slave is genuinely not replying (maybe failed). So what the heck is error <code>-62</code>? Searching around the kernel source we will hit <code>errno.h</code> which gives an error code for various potential errors. In our case the error is &quot;Timer expired&quot; as seen <a href="https://github.com/torvalds/linux/blob/38c23685b273cfb4ccf31a199feccce3bdcb5d83/include/uapi/asm-generic/errno.h#L45" target="_blank">here</a>. Then we have <a href="https://github.com/torvalds/linux/blob/204f144c9fcac355843412b6ba1150086488a208/Documentation/driver-api/usb/error-codes.rst" target="_blank">this</a> helpful guide which confirms our suspicion, the explanation for the code is &quot;No response packet received within the prescribed bus turn-around time.&quot;.</p>
+<h2 id="debugging">Debugging</h2>
+<p>So we know the correct driver is being loaded on the correct USB port, and the USB device is being recognized as a full speed capable. The full speed part is important, as it means that the <code>D+</code> connection is being received correctly (USB full speed devices have a 1.5k ohm pullup resistor on D+ as per <a href="http://www.beyondlogic.org/usbnutshell/usb2.shtml" target="_blank">standard</a>), therefore it is unlikely to be a pin mux&apos;ing issue. The USB device does work in a laptop or desktop, so it&apos;s definitely not dead. Plugging in other USB devices gives the same issue. What else can we do?</p>
+<h3 id="logic-sniffer">Logic Sniffer</h3>
+<p>Enter a Logic Sniffer. This is an indispensable tool which should be sitting right next to your oscilloscope. Normally most places that are willing to invest into their equipment have at least one very nice oscilloscope with the ability to decode signals like SPI/I2C/Serial and more. But the fancier scopes that sample fast enough can decode the fancier protocols like USB and even PCI-E, but they are fairly pricey (easily $10,000 and more). Instead, logic sniffers can be used which tend to be cheaper because all they do is measure HIGH/LOW states, not the signal in 256 (or more) voltage levels.</p>
+<p>Thankfully there are logic sniffers out there like the <a href="http://www.dreamsourcelab.com/dslogic.html" target="_blank">DSLogic</a> which can measure signals up to 400 Mhz for <strong>only</strong> $100 and work with the amazing open source tool <a href="https://sigrok.org/" target="_blank">Sigrok</a>. The best part about Sigrok is it&apos;s open source and actually works, including the moderatly intuitve <a href="https://sigrok.org/wiki/PulseView" target="_blank">Pulse View</a> that lets you graphically view the signal and has many decoders built in, including USB 2.0! We want to view the D+/D- pair from the USB bus, so I grabbed a random USB device I had laying around and soldered in some wires. Yes this totally ruins signal integrity but all we want to do is get a rough idea of what&apos;s going on.</p>
+<p><img src="images/IMG_20180321_031355.jpg" alt="USB hardware"></p>
+<p>Thankfully there is an example capture for USB communications, including the pairing process, so we have something to compare to.</p>
+<p><img src="images/Enumerate_Fail_packet_Small.png" alt="USB Packet view"></p>
+<p>Yeah, that looks somewhat wonky, why are the potentially decoded bits of our signal not on the edge transitions and instead over more than 1 transition? Why is the decoded packet extending way beyond our data transitions and, most importantly, why is the raw packet (not decoded, just the bits) taking twice as long as our known to be good capture? Let&apos;s look at how long the bit duration is.</p>
+<p><img src="images/Enumerate_Fail_singlebit_Small.png" alt="USB Bit length view"></p>
+<p>The heck? Our bit duration is roughly 167 nanoseconds while the known to be good capture says 80 nanoseconds. This is clearly a timing issue on our board. Seeing as how it&apos;s a nice clean half speed, maybe it&apos;s a clock divider being set incorrectly somewhere. For USB 2.0 Full speed, most peripherals need a 48 Mhz clock input, so what might be happening is the USB peripheral is being fed a 24 Mhz clock instead of 48 Mhz, which would explain the half speed.</p>
+<h2 id="usb-clocking">USB Clocking</h2>
+<p>Clocking in general these days for even small micro controllers is not trivial, with a clock tree consisting of many different nodes each with it&apos;s own frequency limitations. To turn a peripheral on or off usually consists of &quot;gating off&quot; a device, meaning to enable or disable the clock for a peripheral. Furthermore, you have many multiplexers to control what part of the clock tree gets it&apos;s clock from what source, and then throw in dividers to make it even more fun. To put it simply, clock trees are complicated.</p>
+<p>For this SOC, the relevant parts of the clock tree are as follows:</p>
+<pre><code>16 MHz oscillator -- (MAINCK) --&gt; PLLA
+                        \-----&gt; PLLB (Dedicated for USB)
+                                    \-- (PLLBCK) --&gt; USB Clock controller
+                                                            \-- (UHPCLK) --&gt; USB Host
+</code></pre><p>Looking at this, we are expecting PLLB to be generating 48 Mhz or higher from a 16 Mhz frequency, therefore setting the PLL multiplier (actually divider based on how a PLL works) of at least 3x. There are a few spots where we can look into what the code assumes the various clocks are set to, one of which being in <code>drivers/usb/host/ohci-at91.c</code> <a href="https://github.com/torvalds/linux/blob/844056fd74ebdd826bd23a7d989597e15f478acb/drivers/usb/host/ohci-at91.c#L78" target="_blank">here</a>.</p>
+<pre><code class="lang-c"><span class="hljs-comment">// drivers/usb/host/ohci-at91.c</span>
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">at91_start_clock</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> ohci_at91_priv *ohci_at91)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (ohci_at91-&gt;clocked)
+        <span class="hljs-keyword">return</span>;
+
+    clk_set_rate(ohci_at91-&gt;fclk, <span class="hljs-number">48000000</span>);
+    clk_prepare_enable(ohci_at91-&gt;hclk);
+    clk_prepare_enable(ohci_at91-&gt;iclk);
+    clk_prepare_enable(ohci_at91-&gt;fclk);
+    ohci_at91-&gt;clocked = <span class="hljs-literal">true</span>;
+}
+</code></pre>
+<p>What&apos;s hclk, iclk, and fclk you ask? Doesn&apos;t say there, so let&apos;s try to find the struct definition of <code>ohci_at91</code>!</p>
+<pre><code class="lang-c"><span class="hljs-keyword">struct</span> ohci_at91_priv {
+    <span class="hljs-keyword">struct</span> clk *iclk;
+    <span class="hljs-keyword">struct</span> clk *fclk;
+    <span class="hljs-keyword">struct</span> clk *hclk;
+    <span class="hljs-keyword">bool</span> clocked;
+    <span class="hljs-keyword">bool</span> wakeup;        <span class="hljs-comment">/* Saved wake-up state for resume */</span>
+    <span class="hljs-keyword">struct</span> regmap *sfr_regmap;
+};
+</code></pre>
+<p>Great, no comments. But wait, turns out that if those clocks fail to be found then the driver reports an error!</p>
+<pre><code class="lang-c"><span class="hljs-comment">/**
+ * usb_hcd_at91_probe - initialize AT91-based HCDs
+ * Context: !in_interrupt()
+ *
+ * Allocates basic resources for this USB host controller, and
+ * then invokes the start() method for the HCD associated with it
+ * through the hotplug entry&apos;s driver_data.
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">usb_hcd_at91_probe</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">struct</span> hc_driver *driver,
+            <span class="hljs-keyword">struct</span> platform_device *pdev)</span>
+</span>{
+    <span class="hljs-comment">// .....</span>
+
+    ohci_at91-&gt;iclk = devm_clk_get(dev, <span class="hljs-string">&quot;ohci_clk&quot;</span>);
+    <span class="hljs-keyword">if</span> (IS_ERR(ohci_at91-&gt;iclk)) {
+        dev_err(dev, <span class="hljs-string">&quot;failed to get ohci_clk\n&quot;</span>);
+        retval = PTR_ERR(ohci_at91-&gt;iclk);
+        <span class="hljs-keyword">goto</span> err;
+    }
+    ohci_at91-&gt;fclk = devm_clk_get(dev, <span class="hljs-string">&quot;uhpck&quot;</span>);
+    <span class="hljs-keyword">if</span> (IS_ERR(ohci_at91-&gt;fclk)) {
+        dev_err(dev, <span class="hljs-string">&quot;failed to get uhpck\n&quot;</span>);
+        retval = PTR_ERR(ohci_at91-&gt;fclk);
+        <span class="hljs-keyword">goto</span> err;
+    }
+    ohci_at91-&gt;hclk = devm_clk_get(dev, <span class="hljs-string">&quot;hclk&quot;</span>);
+    <span class="hljs-keyword">if</span> (IS_ERR(ohci_at91-&gt;hclk)) {
+        dev_err(dev, <span class="hljs-string">&quot;failed to get hclk\n&quot;</span>);
+        retval = PTR_ERR(ohci_at91-&gt;hclk);
+        <span class="hljs-keyword">goto</span> err;
+
+    <span class="hljs-comment">// .......</span>
+}
+</code></pre>
+<p>So all we really learn from this is <code>fclk</code> seems to be <code>uhpck</code> which is after both the PLL and USB peripheral clock divider.</p>
+<h2 id="common-clock-framework">Common Clock Framework</h2>
+<p>Linux has a framework to work with clock trees, including handling depedancies and propogating rate changes to relevant nodes. Each clock has an operations struct containing function pointers to various supported USB operations. In our case, we have operations defined for both <a href="https://github.com/torvalds/linux/blob/58e4411b2d05bea9992fd8ee510f696b73d314c1/drivers/clk/at91/clk-pll.c#L290" target="_blank">PLLB</a> (PLL dedicated for USB) and the USB peripheral clock <a href="https://github.com/torvalds/linux/blob/58e4411b2d05bea9992fd8ee510f696b73d314c1/drivers/clk/at91/clk-usb.c#L186" target="_blank">divider</a>. LWN has a fantastic <a href="https://lwn.net/Articles/472998/" target="_blank">article</a> on this framework.</p>
+<pre><code class="lang-c"><span class="hljs-comment">// linux/drivers/clk/at91/clk-usb.c</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-keyword">struct</span> clk_ops at91sam9n12_usb_ops = {
+    .enable = at91sam9n12_clk_usb_enable,
+    .disable = at91sam9n12_clk_usb_disable,
+    .is_enabled = at91sam9n12_clk_usb_is_enabled,
+    .recalc_rate = at91sam9x5_clk_usb_recalc_rate,
+    .determine_rate = at91sam9x5_clk_usb_determine_rate,
+    .set_rate = at91sam9x5_clk_usb_set_rate,
+};
+
+<span class="hljs-comment">// linux/drivers/clk/at91/clk-pll.c</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-keyword">struct</span> clk_ops pll_ops = {
+    .prepare = clk_pll_prepare,
+    .unprepare = clk_pll_unprepare,
+    .is_prepared = clk_pll_is_prepared,
+    .recalc_rate = clk_pll_recalc_rate,
+    .round_rate = clk_pll_round_rate,
+    .set_rate = clk_pll_set_rate,
+};
+</code></pre>
+<p>Looking around, it looks like the PLL peripheral itself is being modified only through <code>clk_pll_prepare()</code> instead of <code>clk_pll_set_rate()</code>. This is to handle when the PLL peripheral is not yet enabled (powered off) but wanting to modify the divisor and multiplier. When powered off, register access would result in bus faults. The USB clock divider instead has it&apos;s peripheral changed immediatly in it&apos;s <code>set_rate()</code>.</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">clk_pll_set_rate</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> clk_hw *hw, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> rate,
+                <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> parent_rate)</span>
+</span>{
+    <span class="hljs-keyword">struct</span> clk_pll *pll = to_clk_pll(hw);
+    <span class="hljs-keyword">long</span> ret;
+    u32 div;
+    u32 mul;
+    u32 index;
+
+    ret = clk_pll_get_best_div_mul(pll, rate, parent_rate,
+                        &amp;div, &amp;mul, &amp;index);
+    <span class="hljs-keyword">if</span> (ret &lt; <span class="hljs-number">0</span>)
+        <span class="hljs-keyword">return</span> ret;
+
+    pll-&gt;range = index;
+    pll-&gt;div = div;
+    pll-&gt;mul = mul;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-comment">// ....</span>
+
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">clk_pll_prepare</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> clk_hw *hw)</span>
+</span>{
+    <span class="hljs-keyword">struct</span> clk_pll *pll = to_clk_pll(hw);
+    <span class="hljs-comment">// ...</span>
+    regmap_update_bits(regmap, offset, layout-&gt;pllr_mask,
+            pll-&gt;div | (PLL_MAX_COUNT &lt;&lt; PLL_COUNT_SHIFT) |
+            (out &lt;&lt; PLL_OUT_SHIFT) |
+            ((pll-&gt;mul &amp; layout-&gt;mul_mask) &lt;&lt; layout-&gt;mul_shift));
+
+    <span class="hljs-keyword">while</span> (!clk_pll_ready(regmap, pll-&gt;id))
+        cpu_relax();
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h2 id="the-issue">The Issue</h2>
+<p>When a rate change is requested, then the request gets propogated to relevant nodes in the clock tree. In our case, we are modfying <code>fclk</code> which is actually the USB peripheral <strong>after</strong> the PLL and USB clock divider. To get the clock of the node, the operation <code>recalc_rate()</code> is called. For the PLL, we see that the cached values (from the struct) are not being used, and instead the hardware itself is queried.</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> <span class="hljs-title">clk_pll_recalc_rate</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> clk_hw *hw,
+                        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> parent_rate)</span>
+</span>{
+    <span class="hljs-keyword">struct</span> clk_pll *pll = to_clk_pll(hw);
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> pllr;
+    u16 mul;
+    u8 div;
+
+    regmap_read(pll-&gt;regmap, PLL_REG(pll-&gt;id), &amp;pllr);
+
+    div = PLL_DIV(pllr);
+    mul = PLL_MUL(pllr, pll-&gt;layout);
+
+    <span class="hljs-keyword">if</span> (!div || !mul)
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">return</span> (parent_rate / div) * (mul + <span class="hljs-number">1</span>);
+}
+</code></pre>
+<p>While <code>recalc_rate()</code> is documented in the kernel as querying the hardware, in our case it is not in sync if it is called between <code>set_rate()</code> and <code>prepare()</code>. Therefore, when the USB divider has to be configured during the requested rate propogation, it will call <code>recalc_rate()</code> and will get a non sync&apos;d clock rate back.</p>
+<p>In our case, PLLB is being configured to run at 96 Mhz on boot before this call. Then the OHCI driver requests a 48 Mhz clock for the USB peripheral, which has the PLL set it&apos;s <strong>cached</strong> MUL and DIV values (via <code>set_rate()</code>) approriately. Then the USB clock divider queries it&apos;s parent node (the PLL) for it&apos;s clock rate, which will return the current hardware configured clock (96 Mhz in this case). The PLL divider sets it&apos;s divider to /2 to get 48 Mhz.</p>
+<p>Then the OHCI driver calls <code>prepare_and_enable()</code> on the clock, resulting in the PLL applying the cached MUL and DIV values to the PLL peripheral, changing the PLL frequency from 96 Mhz to 48 Mhz. But the USB clock divider is still /2, giving a 24 Mhz frequency, hence the USB device running at half speed.</p>
+<h2 id="the-fix">The Fix</h2>
+<p>The fix involves having <code>recalc_rate()</code> for the PLL use the cached values instead of querying the hardware. While this goes directly against the kernel documentation, it seems to sometimes happen. For example, the Renesas clock driver <a href="https://github.com/torvalds/linux/commit/3092d3b8e56e09ff74d7ef9f1c34a4c358e9f0fe" target="_blank">does</a> this and seems to have <a href="https://spinics.net/lists/linux-renesas-soc/msg00968.html" target="_blank">gone</a> through.</p>
+<p>So, all that needs to be done is to use the MUL and DIV values from the PLL struct.</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> <span class="hljs-title">clk_pll_recalc_rate</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> clk_hw *hw,
+                        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> parent_rate)</span>
+ </span>{
+    <span class="hljs-keyword">struct</span> clk_pll *pll = to_clk_pll(hw);
+-   <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> pllr;
+-   u16 mul;
+-   u8 div;
+-
+-   regmap_read(pll-&gt;regmap, PLL_REG(pll-&gt;id), &amp;pllr);
+-
+-   div = PLL_DIV(pllr);
+-   mul = PLL_MUL(pllr, pll-&gt;layout);
+-
+-   <span class="hljs-keyword">if</span> (!div || !mul)
+-      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+-
+-   <span class="hljs-keyword">return</span> (parent_rate / div) * (mul + <span class="hljs-number">1</span>);
++
++   <span class="hljs-keyword">return</span> (parent_rate / pll-&gt;div) * (pll-&gt;mul + <span class="hljs-number">1</span>);
+ }
+</code></pre>
+<p>Further exploring shows that this was <a href="https://github.com/torvalds/linux/commit/87e2ed338f1b56798807ccf12eb6112d25062202" target="_blank">attempted</a> years ago, but <a href="http://lists.infradead.org/pipermail/linux-arm-kernel/2014-September/283501.html" target="_blank">sadly</a> it seemingly didn&apos;t get accepted.</p>
+<p>Now we plug it in and what do we get?</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="smallerzimage.html" class="navigation navigation-prev " aria-label="Previous page: zImage minifying">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="linux.html" class="navigation navigation-next " aria-label="Next page: Linux">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"USB","level":"1.3.6","depth":2,"next":{"title":"Linux","level":"1.3.7","depth":2,"path":"AT91SAM9N12/linux.md","ref":"AT91SAM9N12/linux.md","articles":[]},"previous":{"title":"zImage minifying","level":"1.3.5","depth":2,"path":"AT91SAM9N12/smallerzimage.md","ref":"AT91SAM9N12/smallerzimage.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"AT91SAM9N12/USB.md","mtime":"2018-04-26T20:22:29.012Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T18:39:01.629Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

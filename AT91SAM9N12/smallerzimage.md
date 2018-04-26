@@ -1,6 +1,6 @@
-# Making things smaller
+# zImage minifying
 
-## Measuring
+## Measurements
 
 As shown earlier, we have a ```2.7 MB``` zImage (kerenel image) when our size limit is ```1.846 MB```, and our root file system is ```1.2 MB``` which is under the max of ```2.217 MB```. There are two points of confusion here:
 
@@ -28,11 +28,11 @@ lib/libuClibc-1.0.28.so                                      uclibc             
 bin/busybox                                                  busybox               719316     722918        99.5                      19.9
 ```
 
-This tells us that a decent portion of the files seem to be device drivers for various USB based wireless dongles, and they all come from the linux package.
+This tells us that a decent portion of the files seem to be device drivers for various USB based wireless dongles, and they all come from the Linux package.
 
 ## Kernel
 
-The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the "Linux" package. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as "Modules" which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the "Marvel WiFi-Ex" drivers are compiled as modules while the "Realtek rtlwifi" drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. 
+The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the "Linux" package. [Here](https://elinux.org/Kernel_Size_Tuning_Guide) is a great guide on how to measure and tune the size of the kernel, some of which we will be using here. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as "Modules" which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the "Marvel WiFi-Ex" drivers are compiled as modules while the "Realtek rtlwifi" drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. 
 
 ![Kernel Modules vs inimage](images/Buildroot_Kernel_Module.PNG)
 
@@ -70,6 +70,7 @@ While our root file system dropped to satisfactory levels, our kernel image is s
 | Graphics support (DRM, backlight, logo, framebuffer) | 169 kB |
 | ext4 in Fle Systems | 138 kB |
 | Network FIle Systems in File systems | 112 kB |
+| Atheros and HTC driver as Module (+116 kB to RootFS) | 94 kB |
 | soundcard support | 84 kB |
 | Miscellaneous file systems (UBIFS) in File systems | 77 kB |
 | Multimedia support | 62 kB |
@@ -77,7 +78,7 @@ While our root file system dropped to satisfactory levels, our kernel image is s
 | MMC SD SDIO card support | 46 kB |
 | Enable Stack unwinding support | 39 kB |
 | UBI Support | 32 kB |
-| NAND device support in Memory Technolog Device (MTD) support | 28.5 KB |
+| NAND device support in Memory Technology Device (MTD) support | 28.5 KB |
 | USB Gadget | 28 kB |
 | HID | 27.8 kB |
 | vfat in DOS/FAT/NT file systems | 20 kB |
@@ -86,13 +87,13 @@ While our root file system dropped to satisfactory levels, our kernel image is s
 | Ethernet Driver in Network device support | 15 kB |
 | Initial RAM disk/file system | 14.5 kB |
 | EHCI HCD | 14.4 kB |
-| voltage and current regulator support | 14 kB |
+| Voltage and current regulator support | 14 kB |
 | PHY Device support in Network Device Support | 13 kB |
 | I2C Support | 12.8 kB |
 | Real Time Clock | 11.5 kB |
 | all input device support | 11 kB |
 | USB Serial Converter | 11 kB |
-| SquashFS with only XZ | 6.7 kB |
+| SquashFS with only XZ (removed other compression) | 6.7 kB |
 | PPS + PTP | 5 kB |
 | PWM Support | 5 kB |
 | USB Modem (CDC ACM) | 5 kB |
@@ -104,7 +105,6 @@ While our root file system dropped to satisfactory levels, our kernel image is s
 | MDIO Bus Device Drivers | 1.5 kB |
 | Atmel SOC AT91RM9200 | 1 kB |
 | Verbose user fault messages | 0.5 kB |
-| Atheros and HTC driver (+116 kB) | 94 kB |
 
 After removing all of these, we have a file size as follows;
 
@@ -113,6 +113,30 @@ After removing all of these, we have a file size as follows;
 -rw-r--r-- 1 hak8or users 1709472 Apr  5 03:09 zImage
 ```
 
-https://elinux.org/Kernel_Size_Tuning_Guide
+## What's else
 
+When the kernel gets compiled many object files (with a ```.o``` extension) get generated. These are files which get put linked into the kernel image during the compilation process. We can use these files to get a rough estimate of what's taking up space. The zImage is well below our limit, so we do not need to change anything here, this is just for curiosity's sake. As we can see, a large portion of this is networking related (ipv4 and ipv6 stack), and some are various drivers used for wifi.
+
+```
+[hak8or@hak8or build]$ size */built-in.o | sort -n -r -k 4 | head -n 30
+ 102937      93    1040  104070   19686 linux-4.15.7/net/wireless/nl80211.o (ex linux-4.15.7/built-in.o)
+  47725    1529     492   49746    c252 linux-4.15.7/net/core/dev.o (ex linux-4.15.7/built-in.o)
+  15770     216   28056   44042    ac0a linux-4.15.7/kernel/printk/printk.o (ex linux-4.15.7/built-in.o)
+  41269     536    1176   42981    a7e5 linux-4.15.7/net/ipv6/addrconf.o (ex linux-4.15.7/built-in.o)
+  36370      13       8   36391    8e27 linux-4.15.7/net/ipv4/tcp_input.o (ex linux-4.15.7/built-in.o)
+  35840     314       0   36154    8d3a linux-4.15.7/net/core/skbuff.o (ex linux-4.15.7/built-in.o)
+  33790      30       0   33820    841c linux-4.15.7/net/mac80211/mlme.o (ex linux-4.15.7/built-in.o)
+  28294     287    2128   30709    77f5 linux-4.15.7/drivers/tty/vt/vt.o (ex linux-4.15.7/built-in.o)
+  28541     675       1   29217    7221 linux-4.15.7/net/ipv6/route.o (ex linux-4.15.7/built-in.o)
+  28037      68    1044   29149    71dd linux-4.15.7/net/core/rtnetlink.o (ex linux-4.15.7/built-in.o)
+  28582     156      12   28750    704e linux-4.15.7/drivers/usb/core/hub.o (ex linux-4.15.7/built-in.o)
+  27864       9       0   27873    6ce1 linux-4.15.7/net/mac80211/tx.o (ex linux-4.15.7/built-in.o)
+  26977     360       0   27337    6ac9 linux-4.15.7/crypto/aes_generic.o (ex linux-4.15.7/built-in.o)
+  26657       9       0   26666    682a linux-4.15.7/fs/namei.o (ex linux-4.15.7/built-in.o)
+  25811     533       4   26348    66ec linux-4.15.7/net/core/filter.o (ex linux-4.15.7/built-in.o)
+  25857     287       2   26146    6622 linux-4.15.7/net/packet/af_packet.o (ex linux-4.15.7/built-in.o)
+  26055       0       0   26055    65c7 linux-4.15.7/lib/crc32.o (ex linux-4.15.7/built-in.o)
+```
+
+Next up is fixing an issue with USB seemingly not working.
 
