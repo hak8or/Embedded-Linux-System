@@ -41,7 +41,7 @@ So we know the correct driver is being loaded on the correct USB port, and the U
 
 Enter a Logic Sniffer. This is an indispensable tool which should be sitting right next to your oscilloscope. Normally most places that are willing to invest into their equipment have at least one very nice oscilloscope with the ability to decode signals like SPI/I2C/Serial and more. But the fancier scopes that sample fast enough can decode the fancier protocols like USB and even PCI-E, but they are fairly pricey (easily $10,000 and more). Instead, logic sniffers can be used which tend to be cheaper because all they do is measure HIGH/LOW states, not the signal in 256 (or more) voltage levels.
 
-Thankfully there are logic sniffers out there like the [DSLogic](http://www.dreamsourcelab.com/dslogic.html) which can measure signals up to 400 Mhz for **only** $100 and work with the amazing open source tool [Sigrok](https://sigrok.org/). The best part about Sigrok is it's open source and actually works, including the moderatly intuitve [Pulse View](https://sigrok.org/wiki/PulseView) that lets you graphically view the signal and has many decoders built in, including USB 2.0! We want to view the D+/D- pair from the USB bus, so I grabbed a random USB device I had laying around and soldered in some wires. Yes this totally ruins signal integrity but all we want to do is get a rough idea of what's going on.
+Thankfully there are logic sniffers out there like the [DSLogic](http://www.dreamsourcelab.com/dslogic.html) which can measure signals up to 400 Mhz for **only** $100 and work with the amazing open source tool [Sigrok](https://sigrok.org/). The best part about Sigrok is it's open source and actually works, including the moderately intuitive [Pulse View](https://sigrok.org/wiki/PulseView) that lets you graphically view the signal and has many decoders built in, including USB 2.0! We want to view the D+/D- pair from the USB bus, so I grabbed a random USB device I had laying around and soldered in some wires. Yes this totally ruins signal integrity but all we want to do is get a rough idea of what's going on.
 
 ![USB hardware](images/IMG_20180321_031355.jpg)
 
@@ -85,7 +85,7 @@ static void at91_start_clock(struct ohci_at91_priv *ohci_at91)
 }
 ```
 
-What's hclk, iclk, and fclk you ask? Doesn't say there, so let's try to find the struct definition of ```ohci_at91```!
+What's ```hclk```, ```iclk```, and ```fclk``` you ask? Doesn't say there, so let's try to find the struct definition of ```ohci_at91```!
 
 ```c
 struct ohci_at91_priv {
@@ -98,7 +98,7 @@ struct ohci_at91_priv {
 };
 ```
 
-Great, no comments. But wait, turns out that if those clocks fail to be found then the driver reports an error!
+Great, minimal comments. But wait, turns out that if those clocks fail to be found then the driver reports an error!
 
 ```c
 /**
@@ -140,7 +140,7 @@ So all we really learn from this is ```fclk``` seems to be ```uhpck``` which is 
 
 ## Common Clock Framework
 
-Linux has a framework to work with clock trees, including handling depedancies and propogating rate changes to relevant nodes. Each clock has an operations struct containing function pointers to various supported USB operations. In our case, we have operations defined for both [PLLB](https://github.com/torvalds/linux/blob/58e4411b2d05bea9992fd8ee510f696b73d314c1/drivers/clk/at91/clk-pll.c#L290) (PLL dedicated for USB) and the USB peripheral clock [divider](https://github.com/torvalds/linux/blob/58e4411b2d05bea9992fd8ee510f696b73d314c1/drivers/clk/at91/clk-usb.c#L186). LWN has a fantastic [article](https://lwn.net/Articles/472998/) on this framework.
+Linux has a framework to work with clock trees, including handling dependencies and propagating rate changes to relevant nodes. Each clock has an operations struct containing function pointers to various supported USB operations. In our case, we have operations defined for both [PLLB](https://github.com/torvalds/linux/blob/58e4411b2d05bea9992fd8ee510f696b73d314c1/drivers/clk/at91/clk-pll.c#L290) (PLL dedicated for USB) and the USB peripheral clock [divider](https://github.com/torvalds/linux/blob/58e4411b2d05bea9992fd8ee510f696b73d314c1/drivers/clk/at91/clk-usb.c#L186). LWN has a fantastic [article](https://lwn.net/Articles/472998/) on this framework.
 
 ```c
 // linux/drivers/clk/at91/clk-usb.c
@@ -164,7 +164,7 @@ static const struct clk_ops pll_ops = {
 };
 ```
 
-Looking around, it looks like the PLL peripheral itself is being modified only through ```clk_pll_prepare()``` instead of ```clk_pll_set_rate()```. This is to handle when the PLL peripheral is not yet enabled (powered off) but wanting to modify the divisor and multiplier. When powered off, register access would result in bus faults. The USB clock divider instead has it's peripheral changed immediatly in it's ```set_rate()```.
+Looking around, it looks like the PLL peripheral itself is being modified only through ```clk_pll_prepare()``` instead of ```clk_pll_set_rate()```. This is to handle when the PLL peripheral is not yet enabled (powered off) but wanting to modify the divisor and multiplier. When powered off, register access would result in bus faults. The USB clock divider instead has it's peripheral changed immediately in it's ```set_rate()```.
 
 ```c
 static int clk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
@@ -208,7 +208,7 @@ static int clk_pll_prepare(struct clk_hw *hw)
 
 ## The Issue
 
-When a rate change is requested, then the request gets propogated to relevant nodes in the clock tree. In our case, we are modfying ```fclk``` which is actually the USB peripheral **after** the PLL and USB clock divider. To get the clock of the node, the operation ```recalc_rate()``` is called. For the PLL, we see that the cached values (from the struct) are not being used, and instead the hardware itself is queried.
+When a rate change is requested, then the request gets propagated to relevant nodes in the clock tree. In our case, we are modifying ```fclk``` which is actually the USB peripheral **after** the PLL and USB clock divider. To get the clock of the node, the operation ```recalc_rate()``` is called. For the PLL, we see that the cached values (from the struct) are not being used, and instead the hardware itself is queried.
 
 ```c
 static unsigned long clk_pll_recalc_rate(struct clk_hw *hw,
@@ -231,9 +231,9 @@ static unsigned long clk_pll_recalc_rate(struct clk_hw *hw,
 }
 ```
 
-While ```recalc_rate()``` is documented in the kernel as querying the hardware, in our case it is not in sync if it is called between ```set_rate()``` and ```prepare()```. Therefore, when the USB divider has to be configured during the requested rate propogation, it will call ```recalc_rate()``` and will get a non sync'd clock rate back.
+While ```recalc_rate()``` is documented in the kernel as querying the hardware, in our case it is not in sync if it is called between ```set_rate()``` and ```prepare()```. Therefore, when the USB divider has to be configured during the requested rate propagation, it will call ```recalc_rate()``` and will get a non sync'd clock rate back.
 
-In our case, PLLB is being configured to run at 96 Mhz on boot before this call. Then the OHCI driver requests a 48 Mhz clock for the USB peripheral, which has the PLL set it's **cached** MUL and DIV values (via ```set_rate()```) approriately. Then the USB clock divider queries it's parent node (the PLL) for it's clock rate, which will return the current hardware configured clock (96 Mhz in this case). The PLL divider sets it's divider to /2 to get 48 Mhz.
+In our case, PLLB is being configured to run at 96 Mhz on boot before this call. Then the OHCI driver requests a 48 Mhz clock for the USB peripheral, which has the PLL set it's **cached** MUL and DIV values (via ```set_rate()```) appropriately. Then the USB clock divider queries it's parent node (the PLL) for it's clock rate, which will return the current hardware configured clock (96 Mhz in this case). The PLL divider sets it's divider to /2 to get 48 Mhz.
 
 Then the OHCI driver calls ```prepare_and_enable()``` on the clock, resulting in the PLL applying the cached MUL and DIV values to the PLL peripheral, changing the PLL frequency from 96 Mhz to 48 Mhz. But the USB clock divider is still /2, giving a 24 Mhz frequency, hence the USB device running at half speed.
 
@@ -247,22 +247,21 @@ So, all that needs to be done is to use the MUL and DIV values from the PLL stru
 static unsigned long clk_pll_recalc_rate(struct clk_hw *hw,
                         unsigned long parent_rate)
  {
-    struct clk_pll *pll = to_clk_pll(hw);
--   unsigned int pllr;
--   u16 mul;
--   u8 div;
+        struct clk_pll *pll = to_clk_pll(hw);
+-       unsigned int pllr;
+-       u16 mul;
+-       u8 div;
 -
--   regmap_read(pll->regmap, PLL_REG(pll->id), &pllr);
+-       regmap_read(pll->regmap, PLL_REG(pll->id), &pllr);
 -
--   div = PLL_DIV(pllr);
--   mul = PLL_MUL(pllr, pll->layout);
+-       div = PLL_DIV(pllr);
+-       mul = PLL_MUL(pllr, pll->layout);
 -
--   if (!div || !mul)
--      return 0;
--
--   return (parent_rate / div) * (mul + 1);
-+
-+   return (parent_rate / pll->div) * (pll->mul + 1);
+-       if (!div || !mul)
+-               return 0;
+ 
+-       return (parent_rate / div) * (mul + 1);
++       return (parent_rate / pll->div) * (pll->mul + 1);
  }
 ```
 
@@ -279,4 +278,4 @@ usb 1-1: Manufacturer: ATHEROS
 usb 1-1: SerialNumber: 12345
 ```
 
-Yay! Now that we have USB working, we can add networking and play with some packages to make this system more fun.
+Yay! Now that we have USB working, we can now [submit](Contributing_Kernel.md) this to the kernel, after which we will add networking and play with some packages to make this system more fun.
