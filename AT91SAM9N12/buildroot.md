@@ -22,10 +22,10 @@ To get Buildroot, you can use the [site](https://buildroot.org/download.html) an
 
 ```bash
 # Download the package
-wget https://buildroot.org/downloads/buildroot-2018.02.tar.gz
+wget https://buildroot.org/downloads/buildroot-2018.02.1.tar.gz
 
-# Extract Ze Full archive (tar -xzf)
-tar -xzf buildroot-2018.02.tar.gz
+# Extract the File (tar -xf, lack of z flag autodetects file type)
+tar -xf buildroot-2018.02.1.tar.gz
 ```
 
 ## Defconfig
@@ -33,7 +33,7 @@ tar -xzf buildroot-2018.02.tar.gz
 Buildroot also makes use of [defconfig's](https://stackoverflow.com/questions/41885015/what-exactly-does-linux-kernels-make-defconfig-do) (default configurations), which you can find by just doing a simple ```find```.
 
 ```bash
-[hak8or@hak8or buildroot-2018.02]$ find . -name "*defconfig" | grep "at91"
+[hak8or@hak8or buildroot-2018.02.1]$ find . -name "*defconfig" | grep "at91"
 ./output/build/linux-headers-4.13/arch/arm/configs/at91_dt_defconfig
 ./output/build/linux-4.13/arch/arm/configs/at91_dt_defconfig
 ./configs/at91sam9x5ek_mmc_dev_defconfig
@@ -60,7 +60,7 @@ To summarize, here is what you need to change:
 ```none
 Buildroot nconfig
     Target Options
-        Target Architecture = ARM Little Nedian
+        Target Architecture = ARM Little Endian
         Target Architecture Variant = arm926t
     Kernel
         Enabled
