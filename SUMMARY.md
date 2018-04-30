@@ -8,6 +8,7 @@
     * [Buildroot](AT91SAM9N12/buildroot.md)
     * [zImage minifying](AT91SAM9N12/smallerzimage.md)
     * [USB](AT91SAM9N12/USB.md)
-    * [Linux](AT91SAM9N12/linux.md)
+    * [Contributing to Kernel](AT91SAM9N12/Contributing_Kernel.md)
+    * [Packages](AT91SAM9N12/Packages.md)
     * [Old School](AT91SAM9N12/OldSchool/readme.md)
 * [MX233](MX233/readme.md)
