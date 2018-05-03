@@ -9,6 +9,8 @@
     * [zImage minifying](AT91SAM9N12/smallerzimage.md)
     * [USB](AT91SAM9N12/USB.md)
     * [Contributing to Kernel](AT91SAM9N12/Contributing_Kernel.md)
+    * [Networking](AT91SAM9N12/Networking.md)
     * [Packages](AT91SAM9N12/Packages.md)
+    * [Replicating](AT91SAM9N12/replicate.md)
     * [Old School](AT91SAM9N12/OldSchool/readme.md)
 * [MX233](MX233/readme.md)

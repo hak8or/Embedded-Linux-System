@@ -1,0 +1,29 @@
+From f7f88913f40aa71026df6377123935ba0f2940eb Mon Sep 17 00:00:00 2001
+From: aaaaaaaaaff <aaaa>
+Date: Wed, 2 May 2018 04:25:23 +0000
+Subject: [PATCH] aaaaa
+
+messageeeeeee
+
+B
+B
+---
+ drivers/usb/core/urb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 9fdf137..60fa733 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -467,7 +467,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 
+ 	/* Check that the pipe's type matches the endpoint's type */
+ 	if (usb_urb_ep_type_check(urb))
+-		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
++		dev_warn_once(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+ 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+ 
+ 	/* Check against a simple/standard policy */
+-- 
+2.17.0
+

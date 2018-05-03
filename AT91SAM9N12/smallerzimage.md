@@ -41,8 +41,8 @@ Buildroot lets you access various packages (one of which is Linux) through the m
 As a reminder, our goal is to have our system do the following:
 
 - Boot to a shell and be able to communicate with it over serial
-- Networking support
 - Use the [RNX-N150HG](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) USB Wifi dongle to talk to the outside world
+- Networking support
 - Read only file system with compression (SquashFS)
 - Run various tools (htop, stress, tmux, ping)
 - If possible, an ssh server and [TCC](https://www.wikiwand.com/en/Tiny_C_Compiler) to compile a small C based demo program
@@ -55,7 +55,7 @@ Things we do not need:
 
 ### Non Relevant Wireless USB drivers
 
-We only need to support the Atheros ```AR9002U``` chipset and Atheros ```AR9271```wireless chip. The driver for this is called **ath9k_htc Drivers** according to the [wikidev](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) site. It is not clear on what this driver is listed under in the kernel configratuion, so simply searching for symbols with "ath9k" when using the nconfig viewer gives this.
+We only need to support the Atheros ```AR9002U``` chipset and Atheros ```AR9271```wireless chip. The driver for this is called **ath9k_htc Drivers** according to the [wikidev](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) site. It is not clear on what this driver is listed under in the kernel configuration, so simply searching for symbols with "ath9k" when using the nconfig viewer gives this.
 
 ![ATH9k Search](images/Linux_ath9k_search.PNG)
 

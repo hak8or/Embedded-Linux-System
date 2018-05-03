@@ -41,7 +41,7 @@ Buildroot also makes use of [defconfig's](https://stackoverflow.com/questions/41
         ...
 ```
 
-Sadly there is no defconfig for our specific board. Usually it's sufficient to just find and adapt the closest defconfig and use that instead, specifically using the same CPU core (```AT91SAM9N12``` uses an ```ARM926EJ-S``` ), but let's try to do this ourselves to see what a defconfig could include. Afterwards, the current configuration of buildroot can be saved as a defconfig which will allow to use a simple ```make AT91SAM9N12_OurCustomBoard_defconfig``` to automatically select everything mentioned below.
+Sadly there is no defconfig for our specific board. Usually it's sufficient to just find and adapt the closest defconfig and use that instead, specifically using the same CPU core (```AT91SAM9N12``` uses an ```ARM926EJ-S``` ), but let's try to do this ourselves to see what a defconfig could include. Afterwards, the current configuration of buildroot can be saved as a defconfig which will allow to use a simple ```make defconfig BR2_DEFCONFIG=/home/hak8or/BrainyV2_buildroot_minimal_defconfig``` to automatically select everything mentioned below.
 
 ## Our Tiny Defconfig
 
@@ -51,7 +51,7 @@ We want the Linux kernel of course, so in the ```Kernel --->``` tab enable the k
 
 For the ```Toolchain --->``` tab, select both ```Enable C++ support``` because we will need that later for many applications. I would suggest also selecting to use the latest ```binutils``` and ```GCC```.
 
-Next up is the device tree we made [earlier](devicetree.md). Create a file called ```at91sam9n12ek_custom.dts``` in the Linux kernel source folder (in my case being ```output/build/linux-4.15.7/arch/arm/boot/dts/```) containing that device tree. In the Kernel tab, enable ```Build a Device Tree Blob```, select ```Use a device tree present in the kernel``` and for the file name put ```at91sam9n12ek_custom``` (yes, there is no file extension included even though it says file name). This will have the kernel build process create a file in the ```output/images``` folder for the compiled device tree with the ```.dtb``` file extension instead of us having to do this manually.
+Next up is the device tree we made [earlier](devicetree.md). Create a file called ```BrainyV2.dts``` in the Linux kernel source folder (in my case being ```output/build/linux-4.15.7/arch/arm/boot/dts/```) containing that device tree. In the Kernel tab, enable ```Build a Device Tree Blob```, select ```Use a device tree present in the kernel``` and for the file name put ```BrainyV2``` (yes, there is no file extension included even though it says file name). This will have the kernel build process create a file in the ```output/images``` folder for the compiled device tree with the ```.dtb``` file extension instead of us having to do this manually.
 
 We will be making use of a Wifi dongle which requires a 3rd party, closed source, firmware binary blob. The linux kernel keeps these out of it's tree and instead has a separate tree just for these [here](https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/). Devices like Wifi dongles, GPU's, and other "complicated" hardware often times have firmware which must be loaded at boot, and sadly most of the time it's closed source. Inside buildroot we can specify for it to download the binary blob and put it into a standard location (```/lib/firmware```) by going in ```Target Packages->Hardware Handling->Firmware->Linux-firmware->Wifi firmware->Atheros 9271```.
 
@@ -72,7 +72,7 @@ Buildroot nconfig
         Kernel compression format = xz compression
         Build a Device Tree Blob = Checked
             Use a device tree present in the kernel
-            Device Tree Source file names = at91sam9n12ek_custom
+            Device Tree Source file names = BrainyV2
     Filesystem images
         tar the root filesystem = unchecked
         squashfs = checked
