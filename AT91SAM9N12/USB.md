@@ -1,6 +1,6 @@
 # USB
 
-Our board has two USB ports, one hardwired to be a USB slave (connect to a USB Host like your desktop), and the other being a USB OTG port (can run as both a slave and host). The underlying peripheral hardware in the SOC is designed to work with the [OHCI standard](https://wiki.osdev.org/Open_Host_Controller_Interface). Since this port is USB 2.0, This results in the registers used to access the device being the same across all OHCI implementations and therefore being able to use a common driver. This is why in the kernel the OHCI driver has been enabled.
+Our board has two USB ports, one hardwired to be a USB slave (connect to a USB Host like your desktop), and the other being a USB OTG port (can run as both a slave and host). The underlying peripheral hardware in the SOC is designed to work with the [OHCI standard](https://wiki.osdev.org/Open_Host_Controller_Interface). Since this port is USB 2.0, this results in the registers used to access the device being the same across all OHCI implementations and therefore being able to use a common driver, hence enabling the OHCI driver in the kernel.
 
 So, we should be able to just plug in our USB wifi dongle and it should work, right?
 
