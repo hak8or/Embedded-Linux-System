@@ -7,7 +7,7 @@ As shown earlier, we have a ```2.7 MB``` zImage (kerenel image) when our size li
 - Why is the root file system so large? It should only have busybox with ```libc``` and ```libc++``` which when combined shouldn't be over a megabyte.
 - What can we remove from the zImage to get the kernel size down while still have a decently functional system?
 
-Lets look at the root file system first since Buildroot provides ```make graph-size```. This will let us see what is occupying so much space in our rootfs via nice plots and csv files in the ```output/graphs``` folder. Keep in mind that "Total filesystem size" is the uncompressed version, meaning no compression has been applied. After pumping the root filesystem through squashfs and then compressing it with xz it drops from ```3.5 MB``` down to ```1.2 MB```. 
+Lets look at the root file system first since Buildroot provides ```make graph-size```. This will let us see what is occupying so much space in our rootfs via nice plots and csv files in the ```output/graphs``` folder. Keep in mind that "Total filesystem size" is the uncompressed version, meaning no compression has been applied. After pumping the root filesystem through squashfs and then compressing it with xz it drops from ```3.5 MB``` down to ```1.2 MB```.
 
 ![Root File System](images/RootFS_Size0.PNG)
 
@@ -32,7 +32,7 @@ This tells us that a decent portion of the files seem to be device drivers for v
 
 ## Kernel
 
-The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the "Linux" package. [Here](https://elinux.org/Kernel_Size_Tuning_Guide) is a great guide on how to measure and tune the size of the kernel, some of which we will be using here. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as "Modules" which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the "Marvel WiFi-Ex" drivers are compiled as modules while the "Realtek rtlwifi" drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image. 
+The Linux kernel is a monolithic kernel, meaning the entire Operating System is running in kernel space, including various device drivers. Therefore, device drivers tend to be included in the kernel source code, in our case being the USB wireless dongles, hence these drivers being marked as coming from the "Linux" package. [Here](https://elinux.org/Kernel_Size_Tuning_Guide) is a great guide on how to measure and tune the size of the kernel, some of which we will be using here. When compiling the Linux kernel you can specify if you want various components to be compiled into the image (zImage in our case) or as "Modules" which get loaded at run time from the root file system. For example, in the below image of the kernel configuration, the "Marvel WiFi-Ex" drivers are compiled as modules while the "Realtek rtlwifi" drivers are compiled into the kernel image. This is why you see the Marvel drivers in the above snippet, since they are in the root file system instead of the kernel image.
 
 ![Kernel Modules vs inimage](images/Buildroot_Kernel_Module.PNG)
 
@@ -71,6 +71,7 @@ While our root file system dropped to satisfactory levels, our kernel image is s
 | ext4 in Fle Systems | 138 kB |
 | Network FIle Systems in File systems | 112 kB |
 | Atheros and HTC driver as Module (+116 kB to RootFS) | 94 kB |
+| Atheros and HTC driver as in Kernel | 91 kB |
 | soundcard support | 84 kB |
 | Miscellaneous file systems (UBIFS) in File systems | 77 kB |
 | Multimedia support | 62 kB |
@@ -106,18 +107,23 @@ While our root file system dropped to satisfactory levels, our kernel image is s
 | Atmel SOC AT91RM9200 | 1 kB |
 | Verbose user fault messages | 0.5 kB |
 
-After removing all of these, we have a file size as follows;
+After removing all of these and having the WiFi drivers in the kernel instead of as modules, we have a file size as follows;
 
 ```bash
--rw-r--r-- 1 hak8or users  987136 Apr  5 03:09 rootfs.squashfs
--rw-r--r-- 1 hak8or users 1709472 Apr  5 03:09 zImage
+[hak8or@CT108 buildroot-2018.02.1]$ ls -la --block-size=k output/images/
+total 2673K
+drwxr-xr-x 2 hak8or hak8or    1K May  2 05:00 .
+drwxr-xr-x 6 hak8or hak8or    1K May  2 03:25 ..
+-rw-r--r-- 1 hak8or hak8or   18K May  2 05:00 at91sam9n12ek_custom.dtb
+-rw-r--r-- 1 hak8or hak8or  844K May  2 05:00 rootfs.squashfs
+-rw-r--r-- 1 hak8or hak8or 1748K May  2 05:00 zImage
 ```
 
 ## What's else
 
 When the kernel gets compiled many object files (with a ```.o``` extension) get generated. These are files which get put linked into the kernel image during the compilation process. We can use these files to get a rough estimate of what's taking up space. The zImage is well below our limit, so we do not need to change anything here, this is just for curiosity's sake. As we can see, a large portion of this is networking related (ipv4 and ipv6 stack), and some are various drivers used for wifi.
 
-```
+```none
 [hak8or@hak8or build]$ size */built-in.o | sort -n -r -k 4 | head -n 30
  102937      93    1040  104070   19686 linux-4.15.7/net/wireless/nl80211.o (ex linux-4.15.7/built-in.o)
   47725    1529     492   49746    c252 linux-4.15.7/net/core/dev.o (ex linux-4.15.7/built-in.o)
@@ -138,5 +144,4 @@ When the kernel gets compiled many object files (with a ```.o``` extension) get 
   26055       0       0   26055    65c7 linux-4.15.7/lib/crc32.o (ex linux-4.15.7/built-in.o)
 ```
 
-Next up is fixing an issue with USB seemingly not working.
-
+Next up is [fixing](USB.md) an issue with USB seemingly not working.
