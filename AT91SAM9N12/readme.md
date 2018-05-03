@@ -20,7 +20,7 @@ The end goal is to have a system that can do the following:
 
 - Boot to a shell and be able to communicate with it over serial
 - Networking support
-- Use the [RNX-N150HG](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) USB Wifi dongle to talk to the outside world
+- Use the [RNX-N150HG](https://wikidevi.com/wiki/Rosewill_RNX-N150HG) USB WiFi dongle to talk to the outside world
 - Read only file system with compression (SquashFS)
 - Run various tools (htop, stress, tmux, ping)
 - If possible, an ssh server and [TCC](https://www.wikiwand.com/en/Tiny_C_Compiler) to compile a small C based demo program
