@@ -103,4 +103,4 @@ total 3.9M
 -rw-r--r-- 1 hak8or users 2.7M Apr  2 17:34 zImage
 ```
 
-This has everything we need to boot, but remember that we only have 4 MB to play with. Given our earlier size constraints for the root file system (```2.217 MB```) and kernel (```1.846 MB```), the kernel (```2.7M```) won't fit. [Next](smaller.md) up is looking into what we can remove in order to decrease in size.
+This has everything we need to boot, but remember that we only have 4 MB to play with. Given our earlier size constraints for the root file system (```2.217 MB```) and kernel (```1.846 MB```), the kernel (```2.7M```) won't fit. [Next](smallerzimage.md) up is looking into what we can remove in order to decrease in size.
