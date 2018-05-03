@@ -47,11 +47,13 @@ Sadly there is no defconfig for our specific board. Usually it's sufficient to j
 
 As said earlier, this SOC uses an ```ARM926EJ-S``` based core running at 400 Mhz with 64 MB of DDR2 SDRAM. When running ```make nconfig``` at the root of the Buildroot directory, go to ```Target Options ---> Target Architecture``` and select ```ARM Little Endian```. To set the actual CPU core, go to ```Target Options ---> Target Architecture Variant``` and select ```arm926t``` (yes, we actually have the "EJ-S" variant but this works fine).
 
-We want the Linux kernel of course, so in the ```Kernel --->``` tab enable the kernel which should populate the kernel version field with ```4.15``` (as of Q1 2018). The linux kernel itself does have a default config for our SOC so select ```in-tree defconfig file``` and type ```at91_dt``` in the "Defconfig Name" field. This configuration has the kernel include various drivers for Atmel's AT91SAM series of IC's and assumes a device tree will be appended to the kernel image.
+We want the Linux kernel of course, so in the ```Kernel --->``` tab enable the kernel which should populate the kernel version field with ```4.15``` (as of Q1 2018). Instead, change the ```Kernel Version``` field to ```Custom version``` and type in ```4.15.18```. This is because later we will apply a few patches to the kernel. The linux kernel itself does have a default config for our SOC so select ```in-tree defconfig file``` and type ```at91_dt``` in the "Defconfig Name" field. This configuration has the kernel include various drivers for Atmels AT91SAM series of IC's and assumes a device tree will be appended to the kernel image.
 
-For the ```Toolchain --->``` tab, select both ```Enable C++ support``` and ```Enable WCHAR support``` because we will need that later for many applications. I would suggest also selecting to use the latest ```binutils``` and ```GCC```.
+For the ```Toolchain --->``` tab, select both ```Enable C++ support``` because we will need that later for many applications. I would suggest also selecting to use the latest ```binutils``` and ```GCC```.
 
 Next up is the device tree we made [earlier](devicetree.md). Create a file called ```at91sam9n12ek_custom.dts``` in the Linux kernel source folder (in my case being ```output/build/linux-4.15.7/arch/arm/boot/dts/```) containing that device tree. In the Kernel tab, enable ```Build a Device Tree Blob```, select ```Use a device tree present in the kernel``` and for the file name put ```at91sam9n12ek_custom``` (yes, there is no file extension included even though it says file name). This will have the kernel build process create a file in the ```output/images``` folder for the compiled device tree with the ```.dtb``` file extension instead of us having to do this manually.
+
+We will be making us of a Wifi dongle which requires a 3rd party, closed source, firmware binary blob. The linux kernel keeps these out of it's tree and instead has a seperate tree just for these [here](https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/). Devices like Wifi dongles, GPU's, and other "complicated" hardware often times have firmware which must be loaded at boot, and sadly most of the time it's closed source. Inside buildroot we can specify for it to download the binary blob and put it into a standard location (```/lib/firmware```) by going in ```Target Packages->Hardware Handling->Firmware->Linux-firmware->Wifi firmware->Atheros 9271```.
 
 Lastly, we only have 4 MB for everything so compression is extremely important. For the root file system we do not need it to be writable, so we can use [SquashFS](https://elinux.org/Squash_FS_Howto). This file system was designed specifically for space constrained systems and has tons of awesome features but has one large issue, it's read only. Also, the [xz](https://tukaani.org/xz/format.html) compression format seems to do the best on my system in terms of compression ratio. To enable the root file system to use squashfs with xz, go to ```Filesystem images --->``` and select ```squashfs root filesystem``` with ```Compression algorithm (xz)```. For the kernel, go to ```Kernel --->``` and ensure the ```Kernel binary format``` is a ```zImage``` with the compression set to ```zx compression```.
 
@@ -64,6 +66,7 @@ Buildroot nconfig
         Target Architecture Variant = arm926t
     Kernel
         Enabled
+        Kernel Version = Custom Version (4.15.18)
         Kernel Configuration = in-tree defconfig file
         Defconfig name = at91_dt
         Kernel compression format = xz compression
@@ -75,10 +78,15 @@ Buildroot nconfig
         squashfs = checked
             Compression algorithm = xz
     Toolchain
-        Enable WCHAR support = checked
         Binutils Version = 2.3
         GCC compiler Version = 7.x
         Enable C++ support = checked
+    Target Packages
+        Hardware Handling
+            Firmware
+                Linux-firmware
+                    WiFi firmware
+                        Atheros 9271 = checked
 ```
 
 Run ```make``` and wait a while. This will download and compile for GCC (our cross compiler), the Linux kernel, Busybox, tools for the host, create a root file system, and lastly create images for both the Kernel and the root file system. This will take a pretty long time (half an hour on an I5-3570k OC'd to 4.6 Ghz running from an SSD and 4.5 GB RAM), so go grab an espresso in the meantime.
