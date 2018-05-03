@@ -23,5 +23,4 @@ For those who don't know, Henrik made [a board](http://hforsten.com/making-embed
 - [Hackaday](http://hackaday.com/2015/04/10/building-super-small-linux-computers-from-scratch/)
 - [Dangerous Prototypes](http://dangerousprototypes.com/2015/04/07/embedded-linux-system/)
 - [ARM](http://community.arm.com/groups/embedded/blog/2015/04/16/maker-builds-a-diy-embedded-linux-computer)
-- [Atmel](http://blog.atmel.com/2015/04/10/building-a-diy-embedded-linux-processor/)
 - [Elektroda.pl](http://www.elektroda.pl/rtvforum/topic3019687.html)
