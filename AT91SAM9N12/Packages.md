@@ -45,25 +45,16 @@ Buildroot also does a fantastic job of dependancy management. It can tell what p
 
 Repeating this process for the other packages, here is what the size of each package is when added to our root file system.
 
-| Package         | RootFS Delta   |
-| :-------------  | :------------: |
-| WPA_Supplicant  |         408 kB |
-| Tmux            |         336 kB |
-| Htop            |         156 kB |
-| LibCurl + Curl  |         148 kB |
-| Dropbear + Zlib |         108 kB |
-| Nano            |          60 kB |
-| Dhrystone       |           4 kB |
-| Stress          |           4 kB |
-
-- **WPA_Supplicant** We need it to connect to wireless networks.
-- **Htop** Vastly prefer over top, used to tell what the state of the system is.
-- **LibCurl + Curl** So we can interface with web API's.
-- **Dhrystone** Can be fun to use for very rough benchmarking.
-- **Stress** Stress test the system for IO, CPU, Memory, etc, sadly can't use stress-ng because we aren't using GlibC due to it's size.
-- **Nano** Helpful little text editor.
-- **tmux** Great for when we want to need two or more terminals at once.
-- **Dropbear** Allows us to run an SSH server on our board. Requires Zlib (only 32 kB), 76 kB with or without "Client Programs".
+| Package         | Summary | RootFS Delta   |
+| :-------------  | :------ | :------------: |
+| WPA_Supplicant  | To connect to wireless networks. |        408 kB |
+| Tmux            | Great for when we want to need two or more terminals at once. |        336 kB |
+| Htop            | Vastly prefer over top, used to tell what the state of the system is. |        156 kB |
+| LibCurl + Curl  | Interfacing with web API's. |        148 kB |
+| Dropbear + Zlib | Allows us to run an SSH server on our board. Requires Zlib (only 32 kB), 76 kB with or without "Client Programs". |        108 kB |
+| Nano            | Helpful little text editor. |         60 kB |
+| Dhrystone       | Can be fun to use for very rough benchmarking. |          4 kB |
+| Stress          | Stress test the system for IO, CPU, Memory, etc. Sadly can't use stress-ng because we aren't using GlibC due to it's size. |          4 kB |
 
 ## Tmux
 
