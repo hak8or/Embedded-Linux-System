@@ -313,3 +313,5 @@ This is suprisingly readable actually, much better than expected.
 ## Summary
 
 Yes, this is a jarring experience if you are used to the pull request systems implimented in Github or GitLab, but it actually works. Linux has been using this method for many many years and it's still going, so clearly it's doing something right. Not to mention, it seems to scale well too based on how many commits there are per day. But it still has a decent learning curve and tons of little nit-picks which don't seem to fully documented in one place.
+
+Lastly, [here](https://lkml.org/lkml/fancy/2018/4/29/105) is my patch on the LKML website, and [here](https://patchwork.kernel.org/patch/10370647/) is the patchwork version.
