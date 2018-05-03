@@ -12,7 +12,6 @@ The end goal is to have the system be fairly usable, with the list from before b
 - [ ] tmux
 - [ ] SSH Server
 - [ ] Nano
-- [ ] TCC to compile tiny web server
 
 As of now, the system can boot into a shell and recognize USB devices, specifically our Wifi dongle. Future changes to the system involve userspace instead of kernel space, hence the divide. We will call this a minimal configuration for our system, which if you want to replicate just follow the [replicating documentation](replicate.md).
 
@@ -75,6 +74,3 @@ If tmux is ran without the proper locale setup, then you are greeted with this `
 ## Drop Bear
 
 Since we have network connectivity, we might as well include the ability to connect to the device over SSH, and connect to other devices over SSH. SSH'ing into a system requires either key or password based authentication, but that gives us an issue. Our root file system is read only, and we do not have a overlay to allow writing to it. Therefore, we cannot just create a new user in the running file system or add a password, because both require writing to the file system. Instead, we can have buildroot add a password to the root user under ```System configuration->Root password```. Right now it's set to "pass".
-
-## TCC
-

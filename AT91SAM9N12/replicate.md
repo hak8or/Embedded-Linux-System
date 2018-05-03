@@ -10,12 +10,38 @@ It is assumed the base directory for this is ```/home/hak8or```. If this should 
 
 Both of these versions sit under their own "minimal" or "full" folder. This replication guide will assume the "minimal" version.
 
-## Dependencies
+## AT91 Bootstrap
+
+To build bootstrap, here is an abbreviated version of what was written in the guide.
 
 ```bash
-# Enter the base directory
-cd /home/hak8or
+# Get at91 bootstrap
+git clone https://github.com/linux4sam/at91bootstrap.git
 
+# Enter the cloned repo
+cd at91bootstrap
+
+# Get the defconfig. Sadly make BrainyV2_AT91Bootstrap_defconfig doesn't work, so we
+# have save it as a .config file.
+wget https://brainyv2.hak8or.com/AT91SAM9N12/configs/BrainyV2_AT91Bootstrap_defconfig -o .config
+
+# Ensure we have a toolchain installed
+yaourt -S arm-none-eabi-gcc
+
+# Say there are only 4 banks in the DRAM IC we are using instead of 8.
+sed -i 's/AT91C_DDRC2_NB_BANKS_8/AT91C_DDRC2_NB_BANKS_4/g' board/at91sam9n12ek/at91sam9n12ek.c
+
+# Build bootstrap, flash-able bin is in binaries/boot.bin
+make CROSS_COMPILE=arm-none-eabi-
+```
+
+You can also just download the binary itself via ```wget https://brainyv2.hak8or.com/AT91SAM9N12/configs/BrainyV2_AT91Bootstrap.bin```.
+
+## Buildroot + Linux
+
+First we get all the dependencies.
+
+```bash
 # Get buildroot
 wget https://buildroot.org/downloads/buildroot-2018.02.1.tar.gz
 tar -xzf buildroot-2018.02.1.tar.gz
@@ -36,7 +62,7 @@ wget https://brainyv2.hak8or.com/AT91SAM9N12/configs/clk-at91-PLL-recalc_rate-no
 wget https://brainyv2.hak8or.com/AT91SAM9N12/configs/USB-Bogus-Pipe-warning-rate-limited.patch
 ```
 
-## Running
+Then to build this, a simple ```make``` in the buildroot folder should suffice. The buildroot defconfig should pull in the device tree, apply the USB clock patch, and compile the kernel with the custom defconfig. The output should be in ```output/images```. If you have issues, ensure the paths in the various ```defconfig```'s is accurate.
 
 ```bash
 # Enter buildroot dir
@@ -49,9 +75,7 @@ make defconfig BR2_DEFCONFIG=/home/hak8or/BrainyV2_buildroot_minimal_defconfig
 make
 ```
 
-Then to build this, a simple ```make``` in the buildroot folder should suffice. The buildroot defconfig should pull in the device tree, apply the USB clock patch, and compile the kernel with the custom defconfig. The output should be in ```output/images```. If you have issues, ensure the paths in the various ```defconfig```'s is accurate.
-
-## Output size
+### Output size
 
 ```bash
 [hak8or@CT108 buildroot-minimal]$ ls -la --block-size=k output/images/
@@ -64,7 +88,6 @@ drwxr-xr-x 6 hak8or hak8or    1K May  3 04:39 ..
 
 [hak8or@CT108 buildroot-minimal]$ cd ../buildroot_full
 
-
 [hak8or@CT108 buildroot_full]$ ls -la --block-size=k output/images/
 total 4015K
 drwxr-xr-x 2 hak8or hak8or    1K May  3 18:52 .
@@ -74,7 +97,9 @@ drwxr-xr-x 6 hak8or hak8or    1K May  3 18:16 ..
 -rw-r--r-- 1 hak8or hak8or 1749K May  3 18:51 zImage
 ```
 
-## New defconfig
+You can also find the binaries in the ```configs/full``` or ```configs/minimal``` folders, with each folder including the bootloader, the device tree binary, the kernel zImage, and the root file system.
+
+### New defconfig
 
 Most packages in buildroot, including buildroot itself, have the ability to save their menuconfig state via a ```make {pkg_name}_savedefconfig``` command. Buildroot itself is a bit diffirent, for example doing ```make savedefconfig``` doesn't seem to create a defconfig file anywhere. Instead, doing ```make savedefconfig BR2_DEFCONFIG=defconfig``` creates a defconfig file at the root of the buildroot directory.
 
