@@ -278,4 +278,4 @@ usb 1-1: Manufacturer: ATHEROS
 usb 1-1: SerialNumber: 12345
 ```
 
-Yay! Now that we have USB working, we can now [submit](Contributing_Kernel.md) this to the kernel, after which we will add networking and play with some packages to make this system more fun.
+Yay! Now that we have USB working, we can now [submit](Contributing_Kernel.md) this to the kernel, after which we will add [networking](Networking.md) and play with some packages to make this system more fun.
