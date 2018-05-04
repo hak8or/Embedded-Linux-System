@@ -31,13 +31,15 @@ If we just worry about size then you would think, hey, lets go with uClibc-ng, r
 
 Buildroot supports a few HTTP webservers, such as Nginx, but we need a small one that can fit in our tiny flash space. Here are a few I looked at and their associated size increase of the zImage.
 
-- **lighthttpd** Very active even today, lots of features, 212 kB
-- **Nginx** Everyone knows nginx, this removed everything except static file hosting, 148 kB
-- **uhttpd** Written by OpenWRT people, handles CGI and IPv6. Only 56 kB
-- **thttpd** Last commit was in 2014, simple, and supports CGI + IPv6. 36 kB
-- **Boa** Discontinued in 2005, but only 20 kB.
-- **DarkHttp** Last commit was in 2016, simple, no CGI, and supports IPv6. Only 8 kB
-- **tinyhttpd** Many versions under this name, shouldn't use this for production, ridiculously simple and tiny at 1 kB.
+| Package         | Summary                                                                                         | RootFS Delta |
+| :-------------  | :---------------------------------------------------------------------------------------------- | :----------: |
+| lighthttpd      | Very active even today, lots of features.                                                       |       212 kB |
+| Nginx           | Everyone knows nginx, this removed everything except static file hosting.                       |       146 kB |
+| uhttpd          | Written by OpenWRT people, handles CGI and IPv6.                                                |        56 kB |
+| thttpd          | Last commit was in 2014, simple, and supports CGI + IPv6.                                       |        36 kB |
+| Boa             | Discontinued in 2005.                                                                           |        20 kB |
+| DarkHttp        | Last commit was in 2016, simple, no CGI, and supports IPv6.                                     |        60 kB |
+| tinyhttpd       | Many versions under this name, shouldn't be used for production. Ridiculously simple and tiny.  |         1 kB |
 
 ## Packages
 
@@ -45,16 +47,16 @@ Buildroot also does a fantastic job of dependancy management. It can tell what p
 
 Repeating this process for the other packages, here is what the size of each package is when added to our root file system.
 
-| Package         | Summary | RootFS Delta   |
-| :-------------  | :------ | :------------: |
-| WPA_Supplicant  | To connect to wireless networks. |        408 kB |
-| Tmux            | Great for when we want to need two or more terminals at once. |        336 kB |
-| Htop            | Vastly prefer over top, used to tell what the state of the system is. |        156 kB |
-| LibCurl + Curl  | Interfacing with web API's. |        148 kB |
-| Dropbear + Zlib | Allows us to run an SSH server on our board. Requires Zlib (only 32 kB), 76 kB with or without "Client Programs". |        108 kB |
-| Nano            | Helpful little text editor. |         60 kB |
-| Dhrystone       | Can be fun to use for very rough benchmarking. |          4 kB |
-| Stress          | Stress test the system for IO, CPU, Memory, etc. Sadly can't use stress-ng because we aren't using GlibC due to it's size. |          4 kB |
+| Package         | Summary                                                                                                                    | RootFS Delta |
+| :-------------  | :------------------------------------------------------------------------------------------------------------------------- | :----------: |
+| WPA_Supplicant  | To connect to wireless networks.                                                                                           |       408 kB |
+| Tmux            | Great for when we want to need two or more terminals at once.                                                              |       336 kB |
+| Htop            | Vastly prefer over top, used to tell what the state of the system is.                                                      |       156 kB |
+| LibCurl + Curl  | Interfacing with web API's.                                                                                                |       148 kB |
+| Dropbear + Zlib | Allows us to run an SSH server on our board. Requires Zlib (only 32 kB), 76 kB with or without "Client Programs".          |       108 kB |
+| Nano            | Helpful little text editor.                                                                                                |        60 kB |
+| Dhrystone       | Can be fun to use for very rough benchmarking.                                                                             |         4 kB |
+| Stress          | Stress test the system for IO, CPU, Memory, etc. Sadly can't use stress-ng because we aren't using GlibC due to it's size. |         4 kB |
 
 ## Tmux
 
