@@ -12,5 +12,6 @@
     * [Networking](AT91SAM9N12/Networking.md)
     * [Packages](AT91SAM9N12/Packages.md)
     * [Replicating](AT91SAM9N12/replicate.md)
+    * [Final Thoughts](AT91SAM9N12/FinalThoughts.md)
     * [Old School](AT91SAM9N12/OldSchool/readme.md)
 * [MX233](MX233/readme.md)
