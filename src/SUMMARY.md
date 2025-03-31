@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](readme.md)
+* [Introduction](README.md)
 * [SAM9N12](AT91SAM9N12/readme.md)
     * [SAM-BA](AT91SAM9N12/SAMBA.md)
     * [AT91 Bootstrap](AT91SAM9N12/AT91_Bootstrap.md)
@@ -14,4 +14,9 @@
     * [Replicating](AT91SAM9N12/replicate.md)
     * [Final Thoughts](AT91SAM9N12/FinalThoughts.md)
     * [Old School](AT91SAM9N12/OldSchool/readme.md)
+        * [AT91 Bootstrap](AT91SAM9N12/OldSchool/at91-bootstrap/readme.md)
+        * [Busybox](AT91SAM9N12/OldSchool/busybox/readme.md)
+        * [Gists](AT91SAM9N12/OldSchool/gists/readme.md)
+        * [Linux](AT91SAM9N12/OldSchool/linux/readme.md)
+        * [U-Boot](AT91SAM9N12/OldSchool/u-boot/readme.md)
 * [MX233](MX233/readme.md)
