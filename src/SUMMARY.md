@@ -20,3 +20,4 @@
         * [Linux](AT91SAM9N12/OldSchool/linux/readme.md)
         * [U-Boot](AT91SAM9N12/OldSchool/u-boot/readme.md)
 * [MX233](MX233/readme.md)
+    * [Gists](MX233/gists/readme.md)
